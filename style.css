@@ -1,37 +1,30 @@
 body {
-    font-family: Arial, sans-serif;
-    max-width: 960px;
-    margin: auto;
-    padding: 2em;
-    background-color: #f7f7f7;
-  }
-  
-  h1 {
-    text-align: center;
-  }
-  
-  .form-group {
-    margin-bottom: 1em;
-  }
-  
-  label {
-    font-weight: bold;
-  }
-  
-  input[type="number"] {
-    width: 80px;
-    padding: 0.4em;
-    margin-left: 10px;
-  }
-  
-  #results {
-    background-color: #fff;
-    padding: 1em;
-    margin-top: 1em;
-    border-left: 4px solid #4CAF50;
-  }
-  
-  .chart {
-    margin-top: 2em;
-  }
-  
+  font-family: Arial, sans-serif;
+  background-color: #f3f7fa;
+  padding: 20px;
+  color: #333;
+}
+.container {
+  max-width: 700px;
+  margin: auto;
+}
+.form-group {
+  margin-bottom: 12px;
+}
+input, select {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+  font-size: 16px;
+}
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+#results {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 12px;
+  border-left: 4px solid #4CAF50;
+}
