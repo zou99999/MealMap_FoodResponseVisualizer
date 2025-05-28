@@ -17,14 +17,105 @@ input, select {
   margin-top: 4px;
   font-size: 16px;
 }
+/* Buttons */
 button {
   padding: 10px 20px;
   font-size: 16px;
   margin-top: 10px;
+  cursor: pointer;
+  background-color: #007acc;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
-#results {
+
+button:hover {
+  background-color: #005f99;
+}
+
+/* Results container */
+#results,
+.recommendation-container {
   margin-top: 20px;
   background-color: #fff;
-  padding: 12px;
+  padding: 16px;
   border-left: 4px solid #4CAF50;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Chart container */
+.chart-container {
+  background: #fff;
+  padding: 16px;
+  margin: 20px 0;
+  border: 1px solid #ddd;
+  border-left: 4px solid #4CAF50;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#glucoseChart,
+#hrChart {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.chart-container svg,
+#glucoseChart svg,
+#hrChart svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 20px auto;
+}
+
+/* Axis styling */
+.axis path,
+.axis line {
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-size: 12px;
+  fill: #666;
+}
+
+/* Line styling */
+.line-path {
+  fill: none;
+  stroke: #007acc;
+  stroke-width: 2px;
+}
+
+/* Data points */
+.dot {
+  fill: #007acc;
+  stroke: #fff;
+  stroke-width: 1px;
+}
+
+/* Chart titles */
+.chart-title {
+  font-size: 16px;
+  text-anchor: middle;
+  fill: #333;
+  font-weight: bold;
+}
+
+/* Y-axis labels */
+.y-label {
+  font-size: 12px;
+  text-anchor: middle;
+  fill: #333;
+}
+
+/* Captions */
+.chart-caption {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
 }

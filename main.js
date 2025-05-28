@@ -44,35 +44,139 @@ function drawChartsFromCSV(startTimeStr, windowHours) {
   const start = new Date(startTimeStr);
   const end = new Date(start.getTime() + windowHours * 60 * 60 * 1000);
 
+  // glucose
   d3.csv("data_p1/Dexcom_001.csv").then(glucose => {
-    glucose = glucose
+    const data = glucose
       .map(d => ({
-        Timestamp: new Date(d["Timestamp (YYYY-MM-DDThh:mm:ss)"]),
-        Value: +d["Glucose Value (mg/dL)"]
+        date: new Date(d["Timestamp (YYYY-MM-DDThh:mm:ss)"]),
+        value: +d["Glucose Value (mg/dL)"]
       }))
-      .filter(d => d.Timestamp >= start && d.Timestamp <= end);
+      .filter(d => d.date >= start && d.date <= end);
 
-    Plotly.newPlot("glucoseChart", [{
-      x: glucose.map(d => d.Timestamp),
-      y: glucose.map(d => d.Value),
-      mode: "lines+markers",
-      name: "Glucose"
-    }], { title: "🩸 Glucose Trend" });
+    // clear and draw
+    d3.select("#glucoseChart").html("");
+    drawLineChart(data, "#glucoseChart", {
+      title: "🩸 Glucose Trend",
+      yLabel: "mg/dL"
+    });
   });
 
+  // heart rate
   d3.csv("data_p1/HR_001.csv").then(hr => {
-    hr = hr
+    const data = hr
       .map(d => ({
-        Timestamp: new Date(d["datetime"]),
-        Value: +d[" hr"]
+        date: new Date(d["datetime"]),
+        value: +d[" hr"]
       }))
-      .filter(d => d.Timestamp >= start && d.Timestamp <= end);
+      .filter(d => d.date >= start && d.date <= end);
 
-    Plotly.newPlot("hrChart", [{
-      x: hr.map(d => d.Timestamp),
-      y: hr.map(d => d.Value),
-      mode: "lines+markers",
-      name: "Heart Rate"
-    }], { title: "❤️ Heart Rate Trend" });
+    d3.select("#hrChart").html("");
+    drawLineChart(data, "#hrChart", {
+      title: "❤️ Heart Rate Trend",
+      yLabel: "bpm"
+    });
   });
 }
+
+function drawLineChart(data, containerSelector, { title, yLabel }) {
+  const margin = { top: 40, right: 20, bottom: 40, left: 50 };
+  const width = 600 - margin.left - margin.right;
+  const height = 300 - margin.top - margin.bottom;
+
+  // create SVG and group
+  const svg = d3.select(containerSelector)
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  // scales
+  const x = d3.scaleTime()
+    .domain(d3.extent(data, d => d.date))
+    .range([0, width]);
+
+  const y = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.value))
+    .nice()
+    .range([height, 0]);
+
+  // axes generators
+  const xAxis = d3.axisBottom(x).ticks(6).tickFormat(d3.timeFormat("%H:%M"));
+  const yAxis = d3.axisLeft(y).ticks(6);
+
+  // append axes
+  const gx = svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", `translate(0,${height})`)
+    .call(xAxis);
+
+  const gy = svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis);
+
+  // line generator
+  const lineGenerator = d3.line()
+    .x(d => x(d.date))
+    .y(d => y(d.value));
+
+  // path for line
+  const path = svg.append("path")
+    .datum(data)
+    .attr("class", "line-path")
+    .attr("d", lineGenerator);
+
+  // draw dots
+  const dots = svg.selectAll(".dot")
+    .data(data)
+    .enter().append("circle")
+      .attr("class", "dot")
+      .attr("cx", d => x(d.date))
+      .attr("cy", d => y(d.value))
+      .attr("r", 4);
+
+  // zoom layer
+  const zoomLayer = svg.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .style("fill", "none")
+    .style("pointer-events", "all");
+
+  // zoom behavior
+  const zoom = d3.zoom()
+    .scaleExtent([1, 10])
+    .translateExtent([[0, 0], [width, height]])
+    .extent([[0, 0], [width, height]])
+    .on("zoom", ({ transform }) => {
+      // rescale x axis
+      const zx = transform.rescaleX(x);
+      gx.call(xAxis.scale(zx));
+      // update line path
+      path.attr("d", d3.line()
+        .x(d => zx(d.date))
+        .y(d => y(d.value))
+      );
+      // update dots
+      dots
+        .attr("cx", d => zx(d.date))
+        .attr("cy", d => y(d.value));
+    });
+
+  zoomLayer.call(zoom);
+
+  // chart title
+  svg.append("text")
+    .attr("class", "chart-title")
+    .attr("x", width / 2)
+    .attr("y", -margin.top / 2)
+    .text(title);
+
+  // y-axis label
+  svg.append("text")
+    .attr("class", "y-label")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", -margin.left + 15)
+    .text(yLabel);
+}
+
