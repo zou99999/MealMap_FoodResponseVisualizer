@@ -24,21 +24,39 @@ function recommendFood() {
       );
     });
 
-    const match = foods.sort((a, b) => a.distance - b.distance)[0];
-    document.getElementById("results").innerHTML = `
-      <h3>✅ Closest Food Match</h3>
-      <p><strong>${match.name}</strong></p>
-      <ul>
-        <li>Calories: ${match.calorie}</li>
-        <li>Sugar: ${match.sugar}g</li>
-        <li>Protein: ${match.protein}g</li>
-      </ul>
-      <p>🕒 Time window: ${match.timeStr} → +${windowHours}h</p>
-    `;
-
-    drawChartsFromCSV(match.time, windowHours);
+    sortedMatches = foods.sort((a, b) => a.distance - b.distance);
+    matchIndex = 0;
+    displayMatch(windowHours);
   });
 }
+
+function displayMatch(windowHours) {
+  const match = sortedMatches[matchIndex];
+  document.getElementById("results").innerHTML = `
+    <h3>✅ Closest Food Match</h3>
+    <p><strong>${match.name}</strong></p>
+    <ul>
+      <li>Calories: ${match.calorie}</li>
+      <li>Sugar: ${match.sugar}g</li>
+      <li>Protein: ${match.protein}g</li>
+    </ul>
+    <p>🕒 Time window: ${match.timeStr} → +${windowHours}h</p>
+    ${matchIndex < sortedMatches.length - 1
+      ? `<button onclick="showNextMatch(${windowHours})">❓ Don't like this one 🤔️? Try Another! </button>`
+      : `<p><em>No more similar matches available.</em></p>`}
+  `;
+  drawChartsFromCSV(match.time, windowHours);
+
+  document.getElementById("results").innerHTML += `
+  <button onclick="window.location.href='mini game/index.html'">🧠 Try Your Knowledge</button>
+`;
+}
+
+function showNextMatch(windowHours) {
+  matchIndex++;
+  displayMatch(windowHours);
+}
+
 
 function drawChartsFromCSV(startTimeStr, windowHours) {
   const start = new Date(startTimeStr);
@@ -179,4 +197,3 @@ function drawLineChart(data, containerSelector, { title, yLabel }) {
     .attr("y", -margin.left + 15)
     .text(yLabel);
 }
-
