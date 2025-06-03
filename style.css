@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #f3f7fa;
-  padding: 20px;
+  padding: 60px;
   color: #333;
 }
 .container {
@@ -120,11 +120,50 @@ button:hover {
   color: #555;
 }
 
+
+
+/* Intro section */
+.intro {
+  /* Make it span the viewport height minus navbar */
+  /* If your navbar is ≈60px tall, use calc(100vh - 60px). */
+  height: calc(100vh - 60px);
+  /* Or just 100vh if you don’t mind it going under the navbar */
+  /* height: 100vh; */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #f0f4f8; /* or a background-image/url(...) */
+  color: #333;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.intro-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.intro-title {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.intro-subtitle {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+/* Navigation Bar */
 .navbar {
-  background-color: #007acc;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  border-radius: 8px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  padding: 10px 0;
+  z-index: 1000;
   text-align: center;
 }
 
