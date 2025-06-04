@@ -171,7 +171,8 @@ body {
    Glucose Chart Container
    (centers the SVG on page)
    ================================ */
-#glucoseChart {
+#glucoseChart,
+#hrChart {
   margin: 0 auto 40px;
   width: 1000px;
 }
@@ -241,11 +242,27 @@ body {
 }
 
 
-
-
-#hrChart {
-  margin: 20px auto;
-  width: 1000px; /* matches the SVG width in drawLineChart */
+/* ================================
+   “Middle Text” Section Between Charts
+   ================================ */
+#middleText {
+  max-width: 1000px;            /* match the chart widths */
+  margin: 20px auto;           /* center horizontally, add vertical space */
+  text-align: center;          /* center the heading/paragraph text */
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  color: #333;
 }
 
+#middleText h2 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: black;              /* use a red accent to match the “heart” theme */
+}
 
+#middleText p {
+  margin: 0 auto;
+  font-size: 1rem;
+  max-width: 700px;            /* keep lines from being too long */
+  opacity: 0.8;
+}

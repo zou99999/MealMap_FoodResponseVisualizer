@@ -118,13 +118,12 @@ function drawChartsFromCSV(startTimeStr, windowHours) {
 
 function plotHR(start, end) {
   d3.csv("data_p1/HR_001.csv").then(raw => {
-    // Parse and filter raw HR readings
     const filtered = raw
       .map(d => {
-        const ts = new Date(d.datetime); // e.g. "2/13/20 15:29"
+        const ts = new Date(d.datetime);
         return {
           timestamp: ts,
-          value:     +d[" hr"]   // HR in bpm
+          value:     +d[" hr"]
         };
       })
       .filter(d => d.timestamp >= start && d.timestamp <= end);
