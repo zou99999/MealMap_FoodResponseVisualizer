@@ -1,0 +1,45 @@
+datetime,logged_food,calorie,total_carb,dietary_fiber,sugar,protein,total_fat
+2020-02-13 18:00:00,20.0 fluid ounce Berry Smoothie,456.0,85.0,1.7,83.0,16.0,3.3
+2020-02-13 20:30:00,"1.0 Chicken Leg, 4.0 Asparagus",488.0,2.5,1.2,0.8,63.4,23.1
+2020-02-14 07:10:00,"8.0 fluid ounce Natrel Lactose Free 2 Percent, 0.75 cup Standard Breakfast",230.0,35.0,0.0,18.0,13.0,0.0
+2020-02-14 09:38:00,0.5 cup Breakfast Trail Mix,280.0,30.0,0.0,22.0,4.0,0.0
+2020-02-14 12:38:00,"200.0 grams Spinach Salad w/ strawberries and cheese, 1.0 Egg",358.0,14.4,0.0,8.7,13.899999999999999,0.0
+2020-02-14 19:30:00,20.0 fluid ounce Acai Smoothie,440.0,92.0,0.0,75.0,5.0,0.0
+2020-02-14 20:00:00,"0.5 cup (Trader Joe's) Mac and Cheese, 5.0 Coconut Shrimp",452.0,53.5,0.0,1.6,16.0,0.0
+2020-02-15 07:30:00,20.0 fluid ounce Spinach Smoothie,308.0,69.0,0.0,38.0,7.2,0.0
+2020-02-15 11:02:00,0.5 cup Breakfast Trail Mix,280.0,30.0,0.0,22.0,4.0,0.0
+2020-02-15 12:38:00,"200.0 grams Spinach Salad w/ blueberries, egg, and cheese, 1.0 Egg",358.0,14.4,0.0,8.7,13.899999999999999,0.0
+2020-02-15 15:30:00,1.0 Babel Cheese,71.0,0.3,0.0,0.3,5.0,0.0
+2020-02-15 15:35:00,0.5 cup Breakfast Trail Mix,280.0,30.0,0.0,22.0,4.0,0.0
+2020-02-15 20:30:00,"0.5 cup Bourbon Chicken, 0.5 cup Rice, 0.5 cup Shrimp, 0.5 cup Cabbage",418.0,37.2,0.0,11.5,42.0,0.0
+2020-02-16 07:00:00,"8.0 fluid ounce Natrel Lactose Free 2 Percent, 0.75 cup Standard Breakfast",230.0,35.0,0.0,18.0,13.0,0.0
+2020-02-16 08:15:00,0.5 cup Breakfast Trail Mix,280.0,30.0,0.0,22.0,4.0,0.0
+2020-02-16 08:49:00,1.0 cup Hot Chocolate,151.0,32.0,0.0,25.0,2.5,0.0
+2020-02-16 11:56:00,1.0 cup Salty Sweet Popcorn,110.0,14.0,0.0,6.0,2.0,0.0
+2020-02-16 12:15:00,"0.5 cup Bourbon Chicken, 0.5 cup Shrimp",298.0,11.1,0.0,9.4,39.0,0.0
+2020-02-16 21:10:00,20.0 fluid ounce Chai Tea,12.0,3.4,0.0,0.0,0.2,0.0
+2020-02-17 06:42:00,1.0 Maple Brown Sugar Oatmeal,158.0,33.0,0.0,13.0,4.0,0.0
+2020-02-17 12:30:00,"2.0 cup Salad with Cranberries, 3.0 Chicken Nuggets",227.0,28.2,0.0,17.0,7.5,0.0
+2020-02-17 21:00:00,"2.0 cup Kale Salad, 1.0 slice Pizza",368.7,40.0,0.0,5.9,13.2,0.0
+2020-02-17 21:56:00,2.0 Oreo Cookies,107.0,17.0,0.0,9.3,0.7,0.0
+2020-02-18 01:40:00,20.0 fluid ounce Kale and Fruit Smoothie,307.5,70.0,0.0,37.5,7.3,0.0
+2020-02-18 06:20:00,"8.0 fluid ounce Natrel Lactose Free 2 Percent, 0.75 cup Standard Breakfast",230.0,35.0,0.0,18.0,13.0,0.0
+2020-02-18 11:00:00,0.5 Muffin,212.0,30.0,0.0,18.0,2.5,0.0
+2020-02-18 11:45:00,0.5 Grilled Chicken Wrap,277.0,23.0,0.0,1.7,16.0,0.0
+2020-02-18 22:00:00,8.0 Ranch Wings,776.0,30.4,0.0,0.6,44.0,0.0
+2020-02-19 11:00:00,20.0 fluid ounce Acai Smoothie,440.0,92.0,0.0,75.0,5.0,0.0
+2020-02-19 15:30:00,0.5 Lemon Loaf,235.0,34.0,0.0,21.0,3.0,0.0
+2020-02-19 18:00:00,1.0 Turkey Slider,314.0,21.0,0.0,3.9,18.0,0.0
+2020-02-19 20:00:00,2.0 cup Chicken and Rice,532.0,22.0,0.0,1.0,67.0,0.0
+2020-02-20 07:37:00,"20.0 fluid ounce Green Smoothie, 0.5 Bagel",447.0,96.0,0.0,42.4,12.7,0.0
+2020-02-20 12:30:00,"2.0 cup Salad, 1.0 Babel bell cheese",84.0,3.0999999999999996,0.0,1.5,5.8,0.0
+2020-02-20 13:00:00,1.0 cup Hot Chocolate,151.0,32.0,0.0,25.0,2.5,0.0
+2020-02-20 18:45:00,1.0 Tangerine Orange,47.0,12.0,0.0,9.3,0.7,0.0
+2020-02-20 20:15:00,2.0 cup Salad,13.0,2.8,0.0,1.2,0.8,0.0
+2020-02-20 20:30:00,20.0 fluid ounce Green Smoothie,308.0,69.0,0.0,38.0,7.2,0.0
+2020-02-21 07:30:00,"8.0 fluid ounce Natrel Lactose Free 2 Percent, 0.75 cup Standard Breakfast",230.0,35.0,0.0,18.0,13.0,0.0
+2020-02-21 11:00:00,1.0 Babybel Cheese,71.0,0.3,0.0,0.3,5.0,0.0
+2020-02-21 12:30:00,"0.5 cup Chicken Salad, 7.0 Pita Bread",793.0,112.3,0.0,4.9,37.0,0.0
+2020-02-21 19:50:00,5.0 Cheese Pita,640.0,95.0,0.0,0.0,30.0,0.0
+2020-02-21 20:00:00,20.0 fluid ounce Spinach Smoothie,308.0,69.0,0.0,38.0,7.2,0.0
+2020-02-22 15:10:00,Boost,654.0,82.0,5.6,40.0,26.0,26.0

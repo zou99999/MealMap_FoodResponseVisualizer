@@ -19,45 +19,32 @@
       <p class="intro-subtitle">Do you know what happens to your body after having this meal? Let's check it out!</p>
     </div>
   </section>
-  <div id = "recommender">
-  <div class="container">
-    <h1>🥗 Nutrient-Based Food Recommendation</h1>
 
-    <div class="form-group">
-      <label>Calories (kcal):</label>
-      <input type="number" id="calories" value="300" />
-    </div>
-    <div class="form-group">
-      <label>Sugar (g):</label>
-      <input type="number" id="sugar" value="20" />
-    </div>
-    <div class="form-group">
-      <label>Protein (g):</label>
-      <input type="number" id="protein" value="10" />
-    </div>
-    <div class="form-group">
-      <label>Time Window (hours):</label>
-      <select id="window">
-        <option value="1">1</option>
-        <option value="2" selected>2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-    </div>
+  <div id="recommendContainer">
+    <label for="calories">Calories (kcal):</label>
+    <input type="number" id="calories" placeholder="e.g. 300" />
+
+    <label for="sugar">Sugar (g):</label>
+    <input type="number" id="sugar" placeholder="e.g. 20" />
+
+    <label for="protein">Protein (g):</label>
+    <input type="number" id="protein" placeholder="e.g. 10" />
+
+    <label for="window">Time Window (hours):</label>
+    <select id="window">
+      <option value="1">1</option>
+      <option value="2" selected>2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+
+    <button id="recommendBtn" onclick="recommendFood()">🔍 Recommend Food</button>
   </div>
-
     
-
-    <button onclick="recommendFood()">🔍 Recommend Food</button>
-
-    <div id="results"></div>
-    <div id="glucoseChart"></div>
-    <div id="hrChart"></div>
-
-  </div>
+  <div id="results"></div>
+  <div id="glucoseChart"></div>
+  <div id="tooltip"></div>
 
   <script src="./main.js"></script>
 </body>
 </html>
-
-<!-- re-deploy-->>

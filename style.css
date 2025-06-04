@@ -1,156 +1,17 @@
+/* ================================
+   Basic Page & Layout
+   ================================ */
 body {
+  margin: 0;
+  padding-top: 60px;
   font-family: Arial, sans-serif;
   background-color: #f3f7fa;
-  padding: 60px;
   color: #333;
 }
-.container {
-  max-width: 700px;
-  margin: auto;
-}
-.form-group {
-  margin-bottom: 12px;
-}
-input, select {
-  width: 100%;
-  padding: 6px;
-  margin-top: 4px;
-  font-size: 16px;
-}
-/* Buttons */
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  margin-top: 10px;
-  cursor: pointer;
-  background-color: #007acc;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-}
 
-button:hover {
-  background-color: #005f99;
-}
-
-/* Results container */
-#results,
-.recommendation-container {
-  margin-top: 20px;
-  background-color: #fff;
-  padding: 16px;
-  border-left: 4px solid #4CAF50;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Chart container */
-.chart-container {
-  background: #fff;
-  padding: 16px;
-  margin: 20px 0;
-  border: 1px solid #ddd;
-  border-left: 4px solid #4CAF50;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-#glucoseChart,
-#hrChart {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.chart-container svg,
-#glucoseChart svg,
-#hrChart svg {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 20px auto;
-}
-
-/* Axis styling */
-.axis path,
-.axis line {
-  stroke: #ccc;
-  shape-rendering: crispEdges;
-}
-
-.axis text {
-  font-size: 12px;
-  fill: #666;
-}
-
-/* Line styling */
-.line-path {
-  fill: none;
-  stroke: #007acc;
-  stroke-width: 2px;
-}
-
-/* Data points */
-.dot {
-  fill: #007acc;
-  stroke: #fff;
-  stroke-width: 1px;
-}
-
-/* Chart titles */
-.chart-title {
-  font-size: 16px;
-  text-anchor: middle;
-  fill: #333;
-  font-weight: bold;
-}
-
-/* Y-axis labels */
-.y-label {
-  font-size: 12px;
-  text-anchor: middle;
-  fill: #333;
-}
-
-/* Captions */
-.chart-caption {
-  text-align: center;
-  margin-top: 8px;
-  font-size: 14px;
-  color: #555;
-}
-
-
-
-/* Intro section */
-.intro {
-  height: 100vh;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f0f4f8;
-  color: #333;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.intro-content {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.intro-title {
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-}
-
-.intro-subtitle {
-  font-size: 2rem;
-  opacity: 0.8;
-}
-
-/* Navigation Bar */
+/* ================================
+   Fixed Navigation Bar
+   ================================ */
 .navbar {
   position: fixed;
   top: 0;
@@ -163,7 +24,7 @@ button:hover {
 }
 
 .navbar a {
-  color: white;
+  color: #fff;
   text-decoration: none;
   margin: 0 15px;
   font-size: 16px;
@@ -173,3 +34,164 @@ button:hover {
 .navbar a:hover {
   text-decoration: underline;
 }
+
+/* ================================
+   Intro / “Hero” Section
+   ================================ */
+.intro {
+  height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f4f8;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.intro-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.intro-title {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.intro-subtitle {
+  font-size: 1.25rem;
+  opacity: 0.8;
+}
+
+/* ================================
+   Recommendation Form Container
+   ================================ */
+#recommendContainer {
+  max-width: 500px;
+  margin: 30px auto;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 20px 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+#recommendContainer label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #555;
+}
+
+#recommendContainer input,
+#recommendContainer select {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+#recommendContainer input:focus,
+#recommendContainer select:focus {
+  outline: none;
+  border-color: #4285F4;
+  box-shadow: 0 0 3px rgba(66, 133, 244, 0.3);
+}
+
+#recommendContainer button {
+  margin-top: 20px;
+  width: 100%;
+  background-color: #4285F4;
+  color: #fff;
+  border: none;
+  padding: 10px 0;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#recommendContainer button:hover {
+  background-color: #3367D6;
+}
+
+/* ================================
+   Recommendation Result Box
+   ================================ */
+#results {
+  margin: 20px auto 40px;
+  max-width: 700px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-left: 4px solid #34A853;   /* Green accent */
+  border-radius: 4px;
+  padding: 20px 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+#results h3 {
+  margin-top: 0;
+  color: #34A853;
+  font-size: 18px;
+}
+
+#results p,
+#results ul {
+  margin: 10px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#results ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+#results button {
+  margin-top: 15px;
+  background-color: #4285F4;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#results button:hover {
+  background-color: #3367D6;
+}
+
+/* ================================
+   Glucose Chart Container
+   (centers the SVG on page)
+   ================================ */
+#glucoseChart {
+  margin: 0 auto 40px;
+  width: 1000px;
+}
+
+/* ================================
+   Tooltip Styling (for D3 hover)
+   ================================ */
+#tooltip {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  display: none;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
