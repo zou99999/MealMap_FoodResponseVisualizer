@@ -48,7 +48,6 @@ function displayMatch(windowHours) {
   const match = sortedMatches[matchIndex];
 
   document.getElementById("results").innerHTML = `
-    <h3>✅ Closest Meal Match</h3>
     <p><strong>${match.name}</strong></p>
     <ul>
       <li>Calories: ${match.calorie}</li>
@@ -306,3 +305,42 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .style("font-weight", "600")
     .text(title);
 }
+
+const second = document.getElementById("fadeSecond");
+const scrollCue = document.getElementById("scrollCue");
+
+window.addEventListener("scroll", function () {
+  const scrollY = window.scrollY;
+
+  // intro section fade
+  const fadeStart1 = 0;
+  const fadeEnd1 = 300;
+  let opacity1 = 1 - (scrollY - fadeStart1) / (fadeEnd1 - fadeStart1);
+  opacity1 = Math.max(opacity1, 0);
+  document.getElementById("fadeIntro").style.opacity = opacity1;
+
+  //second
+  const fadeInStart = 200;
+  const fadeInEnd = 500;
+  const fadeOutStart = 700;
+  const fadeOutEnd = 900;
+
+  let opacity2 = 0;
+  if (scrollY > fadeInStart && scrollY < fadeInEnd) {
+    opacity2 = (scrollY - fadeInStart) / (fadeInEnd - fadeInStart);
+  } else if (scrollY >= fadeInEnd && scrollY < fadeOutStart) {
+    opacity2 = 1;
+  } else if (scrollY >= fadeOutStart && scrollY < fadeOutEnd) {
+    opacity2 = 1 - (scrollY - fadeOutStart) / (fadeOutEnd - fadeOutStart);
+  }
+
+  opacity2 = Math.max(0, Math.min(opacity2, 1));
+  second.style.opacity = opacity2;
+  second.style.transform = `translateY(${(1 - opacity2) * 20}px)`;
+  // scroll cue fade-in
+  const cueTrigger = 500;
+  if (scrollY > cueTrigger) {
+  scrollCue.style.opacity = 1;
+  scrollCue.style.transform = "translateY(0)";
+}
+});

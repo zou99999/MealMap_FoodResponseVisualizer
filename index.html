@@ -13,12 +13,50 @@
     <a href="leaderboard/index.html">🏆 View Leaderboard</a>
   </nav>
   
-  <section class="intro">
+  <section class="intro" id="fadeIntro">
     <div class="intro-content">
-      <h1 class="intro-title">What food did you eat this morning?</h1>
-      <p class="intro-subtitle">Do you know what happens to your body after having this meal? Let's check it out!</p>
+      <h1 class="intro-title">What did you eat this morning?</h1>
+      <p class="intro-subtitle">🌯 That Breakfast Burrito? It Could Betray You.</p>
+      <p class="intro-subtitle">Are you curious of what happens to your body after having this meal? Let's check it out!</p>
+      <p class="intro-text">We use real post-meal data to see how your body likely reacted to what you ate <br>based on 3 major nutrient consumption: sugar, protein, calories.<br>
+      Or if you’re like us -- always debating what to eat -- input your desired nutrient levels,<br> we will get you a close-match recommendation, and show the glucose aftermath.<br>
+     </p>
     </div>
   </section>
+
+  <section id="fadeSecond">
+    <div class="why-content">
+      <h2>Why Sugar, Protein, and Calories?</h2>
+      <p>
+        Sugar, protein, and calorie content are key factors that influence glucose response:
+        sugar typically drives sharp spikes, protein can help stabilize it, and total calories provide context.
+      </p>
+      <p>
+        By connecting these nutrients to glucose trends, we give users a clearer picture of how different
+        meals affect their energy, focus, and long-term health.
+      </p>
+  
+      <h2>Why Glucose?</h2>
+      <p>
+        Glucose is one of the most revealing signals your body gives you.  
+        When we eat, our bodies break food into nutrients — and carbohydrates become glucose,
+        a form of sugar that fuels everything from your brain to your muscles.
+      </p>
+      <p>
+        Some meals trigger rapid spikes and crashes, leaving you tired, hungry, or unfocused. Others give steady energy, less craving, better mood.
+        By visualizing glucose trends, we get a real-time window into how food affects us.
+      </p>
+  
+      <p class="glucose-note">
+        Everyone’s glucose response is different — depending time of day, gut microbiome,
+        stress, sleep, and even food combinations. We are not judging what food is "bad", only exploring:
+        <em>How does this meal tend to affect the body — and could it affect you similarly?</em>
+      </p>
+  
+      <p id="scrollCue" class="scroll-cue">↓ Scroll to start exploring ↓</p>
+    </div>
+  </section>  
+  
 
   <div id="recommendContainer">
     <label for="calories">Calories (kcal):</label>
@@ -40,8 +78,22 @@
 
     <button id="recommendBtn" onclick="recommendFood()">🔍 Recommend Meal</button>
   </div>
-    
+  <div class="match-intro">
+    <h2>✅ Closest Meal Match</h2>
+    <p>
+      Here’s the meal in our dataset that most closely matches your inputs.<br>
+      Curious how your body might have reacted to it? Check the glucose curve below. 📈
+    </p>
+  </div>
   <div id="results"></div>
+
+  <div class="glucose-intro">
+    <h2>🩸 Glucose (mg/dL) After Meal</h2>
+    <p>
+      Based on the matched food, here’s what your body’s glucose levels typically look like over the next few hours.<br>
+      Watch for that spike 👀
+    </p>
+  </div>
   <div id="glucoseChart"></div>
   <div id="tooltip"></div>
 
