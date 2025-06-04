@@ -112,18 +112,71 @@ function drawChartsFromCSV(startTimeStr, windowHours) {
         yLabel: "Glucose (mg/dL)"
       }
     );
+    plotHR(start, end);
+  });
+}
+
+function plotHR(start, end) {
+  d3.csv("data_p1/HR_001.csv").then(raw => {
+    // Parse and filter raw HR readings
+    const filtered = raw
+      .map(d => {
+        const ts = new Date(d.datetime); // e.g. "2/13/20 15:29"
+        return {
+          timestamp: ts,
+          value:     +d[" hr"]   // HR in bpm
+        };
+      })
+      .filter(d => d.timestamp >= start && d.timestamp <= end);
+
+    // Compute minutes_after for each reading
+    filtered.forEach(d => {
+      d.minutes_after = (d.timestamp - start) / 60000;
+    });
+
+    // Group into 1-minute bins by Math.floor(minutes_after)
+    const hrByMinute = new Map();
+    filtered.forEach(d => {
+      const minuteIndex = Math.floor(d.minutes_after);
+      if (!hrByMinute.has(minuteIndex)) {
+        hrByMinute.set(minuteIndex, { sum: 0, count: 0 });
+      }
+      const bucket = hrByMinute.get(minuteIndex);
+      bucket.sum   += d.value;
+      bucket.count += 1;
+    });
+
+    // Build hrData: one point per minute (centered at minuteIndex + 0.5)
+    const hrData = Array.from(hrByMinute.entries())
+      .map(([minuteIndex, { sum, count }]) => ({
+        minutes_after: minuteIndex + 0.5,
+        value:         sum / count
+      }))
+      .sort((a, b) => a.minutes_after - b.minutes_after);
+
+    // Clear old container, then draw HR plot
+    d3.select("#hrChart").html("");
+    drawLineChart(
+      hrData,
+      "#hrChart",
+      {
+        title:  "❤️ Heart Rate (avg. bpm) After Meal",
+        xLabel: "Minutes Since Meal",
+        yLabel: "HR (bpm)"
+      }
+    );
   });
 }
 
 function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
-  // === 1. SVG & Margins ===
+  // 1. SVG & margins
   const margin = { top: 50, right: 30, bottom: 50, left: 60 };
   const outerWidth  = 1000;
   const outerHeight = 500;
   const width  = outerWidth  - margin.left - margin.right;
   const height = outerHeight - margin.top  - margin.bottom;
 
-  // Clear previous content & create SVG container
+  // 1a. Clear container & append SVG
   d3.select(containerSelector).html("");
   const svgRoot = d3.select(containerSelector)
     .style("display", "flex")
@@ -132,7 +185,7 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
       .attr("width",  outerWidth)
       .attr("height", outerHeight);
 
-  // Define a clipPath for the plot area
+  // 1b. Define clipPath
   svgRoot.append("defs")
     .append("clipPath")
       .attr("id", "plot-clip")
@@ -140,11 +193,11 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
       .attr("width",  width)
       .attr("height", height);
 
-  // Create the main <g> shifted by margins
+  // 1c. Main <g> shifted by margins
   const g = svgRoot.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // === 2. Scales ===
+  // 2. Scales
   const xMax = d3.max(data, d => d.minutes_after);
   const xScale = d3.scaleLinear()
     .domain([0, xMax])
@@ -156,14 +209,14 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .domain([yExtent[0] - yPadding, yExtent[1] + yPadding])
     .range([height, 0]);
 
-  // === 3. Axes ===
+  // 3. Axes
   const xAxis = d3.axisBottom(xScale)
     .ticks(Math.min(10, Math.ceil(xMax / 5)))
-    .tickFormat(d => d); // plain minute numbers
+    .tickFormat(d => d);
 
   const yAxis = d3.axisLeft(yScale).ticks(6);
 
-  // Draw X axis at y = height
+  // 3a. Draw X axis
   const gx = g.append("g")
     .attr("transform", `translate(0,${height})`)
     .call(xAxis);
@@ -176,7 +229,7 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .style("font-size", "13px")
     .text(xLabel);
 
-  // Draw Y axis
+  // 3b. Draw Y axis
   g.append("g").call(yAxis);
 
   // Y-axis label
@@ -188,21 +241,18 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .style("font-size", "13px")
     .text(yLabel);
 
-  // === 4. Plot Area (clipped) ===
+  // 4. Plot area (clipped)
   const plotArea = g.append("g")
     .attr("clip-path", "url(#plot-clip)");
 
-  // === 5. Zoom & Pan (HORIZONTAL ONLY) ===
-  // Prepare the zoom behavior
+  // 5. Zoom & pan (horizontal only)
   const zoom = d3.zoom()
     .scaleExtent([1, 10])
-    .translateExtent([[0, 0], [width, 0]])
+    .translateExtent([[0, 0], [width, 0]])   // lock vertical panning
     .extent([[0, 0], [width, height]])
     .on("zoom", ({ transform }) => {
-      // Compute new X-scale
       let zx = transform.rescaleX(xScale);
-
-      // Clamp zx.domain() to [0, xMax]
+      // Clamp domain to [0, xMax]
       let [d0, d1] = zx.domain();
       if (d0 < 0)    d0 = 0;
       if (d1 > xMax) d1 = xMax;
@@ -219,13 +269,13 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
           .curve(d3.curveMonotoneX)
         );
 
-      // Move circles only horizontally
+      // Move circles horizontally
       plotArea.selectAll(".glucose-dot")
         .attr("cx", d => zx(d.minutes_after))
         .attr("cy", d => yScale(d.value));
     });
 
-  // Append a transparent rect (below circles) to capture zoom gestures
+  // Transparent rect to capture zoom events (below circles)
   plotArea.append("rect")
     .attr("width",  width)
     .attr("height", height)
@@ -233,7 +283,7 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .style("pointer-events", "all")
     .call(zoom);
 
-  // === 6. Draw the Glucose Line ===
+  // 6. Draw the line
   const lineGenerator = d3.line()
     .x(d => xScale(d.minutes_after))
     .y(d => yScale(d.value))
@@ -247,15 +297,26 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .attr("stroke", "#D32F2F")
     .attr("stroke-width", 2);
 
-  // === 7. Tooltip Setup ===
+  // 7. Tooltip setup
   let tooltip = d3.select("#tooltip");
   if (tooltip.empty()) {
     tooltip = d3.select("body")
       .append("div")
       .attr("id", "tooltip");
   }
+  tooltip
+    .style("position", "absolute")
+    .style("pointer-events", "none")
+    .style("display", "none")
+    .style("z-index", 10)
+    .style("background-color", "rgba(255,255,255,0.95)")
+    .style("border", "1px solid #ccc")
+    .style("padding", "8px")
+    .style("border-radius", "4px")
+    .style("font-size", "12px")
+    .style("box-shadow", "0 2px 6px rgba(0, 0, 0, 0.1)");
 
-  // === 8. Draw Dots on Top of Zoom Rect ===
+  // 8. Draw dots on top
   plotArea.selectAll(".glucose-dot")
     .data(data)
     .enter()
@@ -267,36 +328,32 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
       .attr("fill", "#D32F2F")
       .attr("opacity", 0.8)
       .on("mouseover", function(event, d) {
-        // Enlarge dot and change its color
         d3.select(this)
           .attr("r", 6)
           .attr("fill", "#E57373");
 
-        // Show tooltip, positioned just above/right of cursor
         tooltip
           .style("left", (event.pageX + 10) + "px")
           .style("top",  (event.pageY - 28) + "px")
           .style("display", "inline-block")
           .html(`
             <strong>${d.minutes_after.toFixed(0)} min</strong><br/>
-            Glucose: ${d.value.toFixed(1)} mg/dL
+            Value: ${d.value.toFixed(1)}
           `);
       })
       .on("mousemove", function(event) {
-        // Move tooltip along with cursor
         tooltip
           .style("left", (event.pageX + 10) + "px")
           .style("top",  (event.pageY - 28) + "px");
       })
       .on("mouseout", function() {
-        // Restore dot style and hide tooltip
         d3.select(this)
           .attr("r", 4)
           .attr("fill", "#D32F2F");
         tooltip.style("display", "none");
       });
 
-  // === 9. Chart Title ===
+  // 9. Chart title
   g.append("text")
     .attr("x", width / 2)
     .attr("y", -margin.top / 2 + 5)

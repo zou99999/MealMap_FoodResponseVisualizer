@@ -243,6 +243,9 @@ body {
 
 
 
-
+#hrChart {
+  margin: 20px auto;
+  width: 1000px; /* matches the SVG width in drawLineChart */
+}
 
 
