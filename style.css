@@ -266,3 +266,8 @@ body {
   max-width: 700px;            /* keep lines from being too long */
   opacity: 0.8;
 }
+
+.container {
+  max-width: 700px;
+  margin: auto;
+}
