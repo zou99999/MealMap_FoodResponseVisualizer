@@ -383,6 +383,33 @@ if (containerSelector.includes("glucose")) {             // 只给血糖图加
     .attr("stroke-linecap", "round")
     .attr("stroke-linejoin", "round");
 
+    /* ---------- 6½. Mean reference line ----------------------------------- */
+// ① 计算均值
+const meanVal = d3.mean(data, d => d.value);
+
+// ② 画横向虚线
+plotArea.append("line")
+  .attr("class", "mean-line")
+  .attr("x1", 0)
+  .attr("x2", width)
+  .attr("y1", yScale(meanVal))
+  .attr("y2", yScale(meanVal))
+  .attr("stroke", containerSelector.includes("glucose") ? "#880E4F" : "#0D47A1") // 红/蓝
+  .attr("stroke-width", 1.5)
+  .attr("stroke-dasharray", "4 4")      // 虚线
+  .style("pointer-events", "none");
+
+// ③ 可选：在右上角标注均值数值
+plotArea.append("text")
+  .attr("x", width - 4)                 // 靠右
+  .attr("y", yScale(meanVal) - 6)       // 稍上移
+  .attr("text-anchor", "end")
+  .attr("font-size", "0.75rem")
+  .attr("fill", "#555")
+  .text(`Mean: ${meanVal.toFixed(1)}`);
+/* ----------------------------------------------------------------------- */
+
+
   // 7. Tooltip setup
   let tooltip = d3.select("#tooltip");
   if (tooltip.empty()) {
