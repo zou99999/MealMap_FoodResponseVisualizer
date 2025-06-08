@@ -208,6 +208,27 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .domain([yExtent[0] - yPadding, yExtent[1] + yPadding])
     .range([height, 0]);
 
+  // --- NEW: gradient for glucose line ------------------------
+  const defs = svgRoot.append("defs");
+
+  const gradient = defs.append("linearGradient")
+  .attr("id", "glucoseGradient")
+  .attr("gradientUnits", "userSpaceOnUse")   // 坐标用像素
+  .attr("x1", 0)
+  .attr("y1", yScale.range()[0])             // 图底
+  .attr("x2", 0)
+  .attr("y2", yScale.range()[1]);            // 图顶
+
+  gradient.append("stop")
+  .attr("offset", "0%")                      // 低值（底部）
+  .attr("stop-color", "#FFCDD2");            // 浅红
+
+  gradient.append("stop")
+  .attr("offset", "100%")                    // 高值（顶部）
+  .attr("stop-color", "#B71C1C");            // 深红
+// -----------------------------------------------------------
+
+
   // 3. Axes
   const xAxis = d3.axisBottom(xScale)
     .ticks(Math.min(10, Math.ceil(xMax / 5)))
@@ -293,7 +314,7 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .attr("class", "glucose-line")
     .attr("d", lineGenerator)
     .attr("fill", "none")
-    .attr("stroke", "#D32F2F")
+    .attr("stroke", "url(#glucoseGradient)") 
     .attr("stroke-width", 2);
 
   // 7. Tooltip setup
