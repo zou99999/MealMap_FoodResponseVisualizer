@@ -367,7 +367,7 @@ gradient.selectAll("stop")
       .on("mouseover", function(event, d) {
         d3.select(this)
           .attr("r", 6)
-          .attr("fill", "#E57373");
+          .attr("fill", colorStops[1]);
 
         tooltip
           .style("left", (event.pageX + 10) + "px")
@@ -386,7 +386,7 @@ gradient.selectAll("stop")
       .on("mouseout", function() {
         d3.select(this)
           .attr("r", 4)
-          .attr("fill", "#D32F2F");
+          .attr("fill", colorStops[2]);
         tooltip.style("display", "none");
       });
 
