@@ -208,8 +208,8 @@ const yExtent = d3.extent(data, d => d.value);
 // 默认直接用数据范围；如果是“#glucoseChart”就强行给更大的缓冲
 let yBottom, yTop;
 if (containerSelector.includes("glucose")) {
-  // 血糖图：顶部至少 180，底部至少 50，让绿色区块也露出来
-  yTop    = Math.max(yExtent[1], 180);   // 高出 180 → 高危区一定可见
+  // 血糖图：顶部至少 200，底部至少 50，让绿色区块也露出来
+  yTop    = Math.max(yExtent[1], 200);   // 高出 180 → 高危区一定可见
   yBottom = Math.min(yExtent[0], 50);    // 给低值留余量
 } else {
   // 心率图：照旧，只加 10% padding
