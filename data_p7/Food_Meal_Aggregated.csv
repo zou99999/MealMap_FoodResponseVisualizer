@@ -1,0 +1,37 @@
+datetime,logged_food,calorie,total_carb,dietary_fiber,sugar,protein,total_fat
+2019-10-16 13:44:00,"129.0 gram (Costco) Seafood Stuffed Salmon, 58.0 gram (Green Giant) Rice Cauliflower - Plain, 212.0 gram (Dayka and Hackett) Navel Orange",320.0,31.4,6.1,19.3,27.0,11.5
+2019-10-16 17:55:00,"171.0 gram Salad - Butter Lettuce, 71.0 gram Chickpeas, 26.0 gram Red Onion, 59.0 gram Chicken, 1.0 tablespoon (Toast) Red Wine Vinegrette",463.4,31.9,9.1,9.9,23.3,13.0
+2019-10-16 20:30:00,"0.25 cup (Jolly Time) Select Yellow Pop Corn - Air Popped, 12.0 ounce Virgil's Zero Sugar Black Cherry Soda",200.0,48.0,12.0,0.0,8.0,2.0
+2019-10-16 22:25:00,"1.0 (Peppridge Farm) Whole Wheat Hamburger Bun, 2.0 tablespoon (Jif) Extra Crunchy Peanut Butter",320.0,30.0,5.0,6.0,14.0,17.5
+2019-10-17 10:05:00,"1.0 (Quaker) Old Fashioned Oats, 113.0 gram (Red Delicious) Apple with Skin, 1.0 tablespoon Ground Flaxseeds, 2.0 tablespoon (Now) Whole Psyllium Husks, 1.0 cup (Harris Teeter) Fat Free Organic Milk",445.0,81.0,18.7,35.2,15.5,7.7
+2019-10-17 13:00:00,"1.0 (Peppridge Farm) Whole Wheat Hamburger Bun, 2.0 tablespoon (Jif) Extra Crunchy Peanut Butter",320.0,30.0,5.0,6.0,14.0,17.5
+2019-10-17 16:35:00,"2.0 cup Homemade Chicken Noodle Soup with chicken, onion, celery, (Kirkland) organic chicken stock, and (Amish Kitchens) wide egg noodles",124.0,15.0,1.0,1.3,6.3,4.7
+2019-10-17 19:05:00,"58.0 gram Tilapia, 52.0 gram (Harris Teeter) Charleston Crabcake, 42.0 gram (Green Giant) Rice Cauliflower - Plain, 85.0 gram Broccoli - Steamed, 1.0 teaspoon Lemon Juice",205.3,12.200000000000001,3.9,2.8,23.6,7.6000000000000005
+2019-10-17 20:50:00,"0.25 cup (Jolly Time) Select Yellow Pop Corn - Air Popped, 12.0 ounce Virgil's Zero Sugar Black Cherry Soda",200.0,48.0,12.0,0.0,8.0,2.0
+2019-10-18 09:45:00,Std bfast,280.0,56.5,1.0,24.0,8.0,2.5
+2019-10-18 13:00:00,"0.5 (Firebirds Wood Fired Grill) Steak Sandwich with lettuce and onion, 0.75 (Firebirds Wood Fired Grill) Seasoned Steak Fries, 8.0 ounce (Alex's) Lemonade",871.5,111.8,9.0,30.3,27.5,35.1
+2019-10-18 18:10:00,"85.0 gram Butter Lettuce, 17.0 gram Red Onion, 1.0 teaspoon (Toast) Red Wine Vinegrette, 50.0 gram Tilapia, 29.0 gram (Harris Teeter) Charleston Crabcake, 1.0 teaspoon Lemon Juice",145.3,6.6,1.3,2.6,17.400000000000002,5.7
+2019-10-18 18:40:00,30.0 gram Pecans,207.0,4.2,2.9,1.2,2.8,22.0
+2019-10-18 21:00:00,0.25 cup (Jolly Time) Select Yellow Pop Corn - Air Popped,200.0,48.0,12.0,0.0,8.0,2.0
+2019-10-18 22:30:00,"1.0 (Peppridge Farm) Whole Wheat Hamburger Bun, 7.0 gram Smart Balance, 212.0 gram Navel Orange",275.0,49.0,7.7,21.0,8.9,6.3
+2019-10-19 12:10:00,"1.0 (Quaker) Old Fashioned Oats, 115.0 gram (Red Delicious) Apple with Skin, 1.0 tablespoon Ground Flaxseeds, 2.0 tablespoon (Now) Whole Psyllium Husks, 2.0 teaspoon Cinnamon, 1.0 cup (Harris Teeter) Fat Free Organic Milk",401.0,71.2,19.2,25.3,15.4,7.6
+2019-10-19 16:15:00,"143.0 gram Chicken breaded with (Progesso) Italian Bread Crumbs, 100.0 gram Potato, 1.0 tablespoon Extra Virgin Olive Oil, 1.0 tablespoon (Crosse and Blackwell) Old Fashioned English Fish and Chip  Vinegar",535.0,45.0,3.6,2.7,37.5,22.7
+2019-10-19 20:25:00,"3.0 cup Homemade soup with Hot Italian sausage, kale, cannolli beans, onion, garlic, (Kirkland) organic chicken stock, white wine",600.0,48.0,4.5,8.3,22.5,36.0
+2019-10-19 21:30:00,"1.0 cup Homemade soup with Hot Italian sausage, kale, cannolli beans, onion, garlic, (Kirkland) organic chicken stock, white wine",200.0,16.0,1.5,2.8,7.5,12.0
+2019-10-20 10:40:00,Std Bfast,280.0,56.5,1.0,24.0,8.0,2.5
+2019-10-20 13:40:00,"1.0 cup Homemade soup with Hot Italian sausage, kale, cannolli beans, onion, garlic, (Kirkland) organic chicken stock, white wine",200.0,16.0,1.5,2.8,7.5,12.0
+2019-10-20 18:35:00,"122.0 gram Chicken breaded with (Progesso) Italian Bread Crumbs, 54.0 gram Potato, 1.0 tablespoon Extra Virgin Olive Oil, 1.0 tablespoon (Crosse and Blackwell) Old Fashioned English Fish and Chip  Vinegar",444.8,31.8,2.4,1.9,31.299999999999997,21.4
+2019-10-20 21:20:00,"0.25 cup (Jolly Time) Select Yellow Pop Corn - Air Popped, 12.0 ounce Virgil's Zero Sugar Black Cherry Soda",200.0,48.0,12.0,0.0,8.0,2.0
+2019-10-21 10:30:00,Std Bfast,280.0,56.5,1.0,24.0,8.0,2.5
+2019-10-21 13:45:00,"1.0 (Quaker) Old Fashioned Oats, 101.0 gram (Red Delicious) Apple with Skin, 1.0 tablespoon Ground Flaxseeds, 2.0 tablespoon (Now) Whole Psyllium Husks, 2.0 teaspoon Cinnamon, 1.0 cup (Harris Teeter) Fat Free Organic Milk",393.0,69.2,18.9,24.3,15.4,7.6
+2019-10-21 19:05:00,"171.0 gram Butter Lettuce, 90.0 gram Chickpeas, 34.0 gram Red Onion, 48.0 gram Chicken, 1.0 tablespoon (Toast) Red Wine Vinegrette",324.9,33.1,9.2,9.1,22.200000000000003,12.2
+2019-10-22 10:00:00,"1.0 (Quaker) Old Fashioned Oats, 117.0 gram (Red Delicious) Apple with Skin, 1.0 tablespoon Ground Flaxseeds, 2.0 tablespoon (Now) Whole Psyllium Husks, 2.0 teaspoon Cinnamon, 1.0 cup (Harris Teeter) Fat Free Organic Milk",402.0,71.2,19.3,25.3,15.4,7.6
+2019-10-22 16:10:00,"3.0 cup Homemade Beef and Barley Soup with onion, celery, kale, (Simple Truth) fat free organic beef stock, and (Pacific) low sodium organic vegetable broth",324.0,49.5,5.6,7.6,18.0,6.0
+2019-10-22 19:05:00,"93.0 gram Butter Lettuce, 53.0 gram Chickpeas, 12.0 gram Red Onion, 105.0 gram Chicken breaded with (Progesso) Italian Bread Crumbs, 2.0 teaspoon (Toast) Red Wine Vinegrette, 42.0 gram Potato, 0.5 tablespoon Extra Virgin Olive Oil, 1.0 tablespoon (Crosse and Blackwell) Old Fashioned English Fish and Chip  Vinegar",463.7,45.1,7.1,6.7,32.9,16.9
+2019-10-23 06:00:00,Std Bfast,280.0,56.5,1.0,24.0,8.0,2.5
+2019-10-23 11:30:00,"1.0 (Peppridge Farm) Whole Wheat Hamburger Bun, 2.0 tablespoon (Jif) Extra Crunchy Peanut Butter",320.0,30.0,5.0,6.0,14.0,17.5
+2019-10-23 13:20:00,"1.0 (NOSH) Owen's Crunchy Chicken Sandwich without dijonnaise, 1.0 (NOSH) Veggie Slaw Side Order",642.0,53.0,4.7,16.8,31.0,34.0
+2019-10-23 16:00:00,43.0 gram Hershey's Milk Chocolate Bar,220.0,26.0,1.0,24.0,3.0,13.0
+2019-10-23 19:15:00,"60.0 gram Salad - Spring Mix, 78.0 gram Chickpeas, 18.0 gram Red Onion, 1.0 teaspoon (Toast) Red Wine Vinegrette, 2.0 cup Homemade Chicken Noodle Soup with chicken, onion, celery, (Kirkland) organic chicken stock, and (Amish Kitchens) wide egg noodles",288.3,41.4,8.4,6.800000000000001,14.8,8.0
+2019-10-23 20:55:00,"0.25 cup (Jolly Time) Select Yellow Pop Corn - Air Popped, 12.0 ounce Virgil's Zero Sugar Black Cherry Soda",200.0,48.0,12.0,0.0,8.0,2.0
+2019-10-24 08:30:00,Boost,654.0,82.0,5.6,40.0,26.0,26.0

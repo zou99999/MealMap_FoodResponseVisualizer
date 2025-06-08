@@ -1,0 +1,25 @@
+datetime,logged_food,calorie,total_carb,dietary_fiber,sugar,protein,total_fat
+2020-02-21 06:30:00,"2 Salmon cakes, Large coffee with heavy cream",820,60.6,4.6,6.4,34.4,49.0
+2020-02-21 08:30:00,Standard breakfast,280,56.5,1.0,24.0,8.0,2.5
+2020-02-21 13:15:00,"Ham and cheese sandwhich, 2 small Brownies, 1 Tbsp Peanut Butter",1077,81.9,3.1999999999999997,32.7,37.7,70.0
+2020-02-21 16:30:00,"2 slices Two slices of bread, 2 Tbsp Butter",358,28.0,1.6,3.2,5.4,25.9
+2020-02-21 19:30:00,"Chipotle burrito bowl chicken and steak, black beans, cheese, lettuce, salsa, sour cream, 2 12oz bears 2 Yuengling beers",1320,143.4,14.0,5.6,52.4,38.0
+2020-02-22 08:00:00,2  cups 2 cups coffee w/ heavy cream,168,5.0,0.0,5.0,5.0,14.0
+2020-02-22 12:45:00,"Elmo's diner breakfast burrito 2 eggs/sausage/black beans/sour cream, Side of home fried potatoes, 1 cup coffee",976,119.6,2.7,4.0,38.3,38.8
+2020-02-23 08:00:00,Standard breakfast,280,56.5,1.0,24.0,8.0,2.5
+2020-02-23 10:00:00,"1 cup brown rice, 1 can sardines, 1 cup kimchi",266,49.6,6.0,1.6,9.299999999999999,4.8
+2020-02-23 11:00:00,"2 slices french bread, 4 slices Swiss cheese, 4 slices Salami",920,67.9,2.8,6.1,51.2,48.4
+2020-02-23 18:00:00,"Chicken soup, 3 Crostinis (slice of French bread, swiss, tomato)",690,123.0,8.8,14.2,30.7,8.2
+2020-02-24 08:00:00,Chicken soup,168,24.0,4.6,5.2,10.0,3.7
+2020-02-24 19:30:00,"Chicken enchiladas with black beans, spanish rice, salsa, 1 pint Beer",740,77.0,4.4,4.8,30.2,19.8
+2020-02-25 06:30:00,Standard breakfast,280,56.5,1.0,24.0,8.0,2.5
+2020-02-25 08:00:00,"1 bagel with cream cheese, 1 coffee with cream",463,59.6,1.7,12.5,15.4,18.0
+2020-02-25 12:00:00,1 ensure plus,355,50.0,0.0,21.0,13.0,11.0
+2020-02-25 17:00:00,"12"" Italian BMT Subway whole wheat mayo",1064,60.0,6.2,8.0,50.0,70.0
+2020-02-25 20:00:00,"3 piece Bojangles chicken thigh, 32 fluid oz Sweat tea ice",1034,107.4,0.8,80.0,57.0,42.0
+2020-02-26 09:30:00,Chicken soup,168,24.0,4.6,5.2,10.0,3.7
+2020-02-26 10:15:00,"Banana, 1 Tbsp Peanut Butter",199,30.9,4.0,15.1,4.8,8.4
+2020-02-26 18:30:00,"4 slices Plain cheese pizza, 2 oz Anchovies, 1 cup Salad, 2 Tbsp Blue Cheese dressing, 32 oz Lemonade",2085,256.8,16.3,51.0,80.6,80.8
+2020-02-27 10:30:00,Standard breakfast,280,56.5,1.0,24.0,8.0,2.5
+2020-02-27 11:30:00,"1 slices Plain cheese pizza, 1 cup cooked black eyed peas",650,92.0,14.9,11.7,32.0,16.9
+2020-02-28 08:00:00,Boost,654,82.0,5.6,40.0,26.0,26.0

@@ -1,51 +1,61 @@
 # aggregate_meals.py
 import pandas as pd
 import os
+import sys
 
-# 1. Paths (adjust if your structure is different)
-input_path  = 'data_p1/Food_Log_001.csv'
-output_path = 'data_p1/Food_Meal_Aggregated.csv'
+# 1. Read the participant ID from command-line arguments
+if len(sys.argv) != 2:
+    print("Usage: python aggregate_meals.py <participant_id>")
+    sys.exit(1)
+participant = sys.argv[1].strip().zfill(3)
 
-# 2. Check that the input file exists
+# 2. Build input/output file paths
+folder = f"data_p{int(participant)}"
+input_path  = os.path.join(folder, f"Food_Log_{participant}.csv")
+output_path = os.path.join(folder, "Food_Meal_Aggregated.csv")
+
+# 3. Verify input exists
 if not os.path.exists(input_path):
     raise FileNotFoundError(f"Cannot find: {input_path}")
 
-# 3. Load your raw food-log
+# 4. Load the raw food log
+#    Assumes columns include: "time_begin", "amount", "unit", "logged_food",
+#    and nutrient columns named exactly: calorie, total_carb, dietary_fiber, sugar, protein, total_fat
 df_food = pd.read_csv(input_path)
 
-# 4. PARSE datetime: 
-#    time_begin already looks like "2020-02-13 18:00:00" in the CSV,
-#    so we can parse it directly—no need to prepend the 'date' column.
+# 5. Parse the datetime column
+#    "time_begin" is already in ISO format in the CSV
 df_food['datetime'] = pd.to_datetime(df_food['time_begin'])
 
-# 5. Build a “food_description” = “amount + unit + food_name”
+# 6. Build a descriptive 'food_description' = "amount + unit + logged_food"
 def format_description(row):
     amt = "" if pd.isna(row['amount']) else f"{row['amount']}"
     unit = ""
     if isinstance(row['unit'], str) and row['unit'].strip():
         unit = f" {row['unit']}"
-    # If both amt and unit are empty, this reduces to just the food name.
     return f"{amt}{unit} {row['logged_food']}".strip()
 
 df_food['food_description'] = df_food.apply(format_description, axis=1)
 
-# 6. Group by exact datetime and sum the nutrition, while joining all food_descriptions
+# 7. Aggregate by 'datetime':
+#    - Concatenate all 'food_description' values with ", "
+#    - Sum each nutrient column
 aggregated = df_food.groupby('datetime').agg({
-    'food_description': lambda x: ', '.join(x),
-    'calorie':       'sum',
-    'total_carb':    'sum',
-    'dietary_fiber': 'sum',
-    'sugar':         'sum',
-    'protein':       'sum',
-    'total_fat':     'sum'
+    'food_description': lambda texts: ', '.join(texts),
+    'calorie':        'sum',
+    'total_carb':     'sum',
+    'dietary_fiber':  'sum',
+    'sugar':          'sum',
+    'protein':        'sum',
+    'total_fat':      'sum'
 }).reset_index()
 
-# 7. Rename the column back to “logged_food” so it matches your JS expectations
+# 8. Rename for JS compatibility
 aggregated.rename(columns={'food_description': 'logged_food'}, inplace=True)
 
-# 8. Save to a new CSV
+# 9. Save to CSV
 aggregated.to_csv(output_path, index=False)
 
-print(f"✅  Written aggregated file to:\n    {output_path}\n")
-print("Here are the first few rows:")
+print(f"✅ Written aggregated file to: {output_path}")
+print("First few rows of the aggregated data:")
 print(aggregated.head(10).to_string(index=False))
