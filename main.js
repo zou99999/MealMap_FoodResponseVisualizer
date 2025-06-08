@@ -227,8 +227,8 @@ const defs = svgRoot.append("defs");
 const gradient = defs.append("linearGradient")
   .attr("id", gradientId)
   .attr("gradientUnits", "userSpaceOnUse")
-  .attr("x1", 0).attr("y1", yScale(maxVal))   // 顶：最大值
-  .attr("x2", 0).attr("y2", yScale(minVal));  // 底：最小值
+  .attr("x1", 0).attr("y1", yScale(minVal))   
+  .attr("x2", 0).attr("y2", yScale(maxVal));  
 
 gradient.selectAll("stop")
   .data([
