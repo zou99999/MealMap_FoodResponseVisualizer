@@ -202,11 +202,28 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .domain([0, xMax])
     .range([0, width]);
 
-  const yExtent = d3.extent(data, d => d.value);
-  const yPadding = (yExtent[1] - yExtent[0]) * 0.1;
-  const yScale = d3.scaleLinear()
-    .domain([yExtent[0] - yPadding, yExtent[1] + yPadding])
-    .range([height, 0]);
+  // ===== NEW Y-SCALE  (fix upper bound so high-risk band shows) =====
+const yExtent = d3.extent(data, d => d.value);
+
+// 默认直接用数据范围；如果是“#glucoseChart”就强行给更大的缓冲
+let yBottom, yTop;
+if (containerSelector.includes("glucose")) {
+  // 血糖图：顶部至少 180，底部至少 50，让绿色区块也露出来
+  yTop    = Math.max(yExtent[1], 180);   // 高出 180 → 高危区一定可见
+  yBottom = Math.min(yExtent[0], 50);    // 给低值留余量
+} else {
+  // 心率图：照旧，只加 10% padding
+  const pad = (yExtent[1] - yExtent[0]) * 0.1;
+  yTop    = yExtent[1] + pad;
+  yBottom = yExtent[0] - pad;
+}
+
+const yScale = d3.scaleLinear()
+  .domain([yBottom, yTop])   // 低 → 高（range 已是 [height,0]）
+  .range([height, 0])
+  .nice();
+// ===============================================================
+
 
   /* ---------- BOLDER PER-CHART GRADIENT ---------- */
 const minVal = d3.min(data, d => d.value);
