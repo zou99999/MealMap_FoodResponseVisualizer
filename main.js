@@ -208,25 +208,40 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .domain([yExtent[0] - yPadding, yExtent[1] + yPadding])
     .range([height, 0]);
 
-  // --- NEW: gradient for glucose line ------------------------
-  const defs = svgRoot.append("defs");
+  /* ---------- BOLDER PER-CHART GRADIENT ---------- */
+const minVal = d3.min(data, d => d.value);
+const maxVal = d3.max(data, d => d.value);
 
-  const gradient = defs.append("linearGradient")
-  .attr("id", "glucoseGradient")
-  .attr("gradientUnits", "userSpaceOnUse")   // 坐标用像素
-  .attr("x1", 0)
-  .attr("y1", yScale.range()[0])             // 图底
-  .attr("x2", 0)
-  .attr("y2", yScale.range()[1]);            // 图顶
+// ① 基于容器名生成唯一 ID
+const gradientId = `${containerSelector.replace('#','')}-gradient`;
 
-  gradient.append("stop")
-  .attr("offset", "0%")                      // 低值（底部）
-  .attr("stop-color", "#FFCDD2");            // 浅红
+// ② 给不同图分配颜色组（想统一只留一组即可）
+const colorStops = containerSelector.includes('glucose') ?     // 血糖：红系
+  ["#FFEBEE", "#EF5350", "#7B1C1C"] :
+  containerSelector.includes('hr') ?                           // 心率：蓝系
+  ["#E3F2FD", "#42A5F5", "#0D47A1"] :
+  ["#FFFDE7", "#FFEB3B", "#F9A825"];                           // 其他：黄系示例
 
-  gradient.append("stop")
-  .attr("offset", "100%")                    // 高值（顶部）
-  .attr("stop-color", "#B71C1C");            // 深红
-// -----------------------------------------------------------
+// ③ 画 <linearGradient>
+const defs = svgRoot.append("defs");
+const gradient = defs.append("linearGradient")
+  .attr("id", gradientId)
+  .attr("gradientUnits", "userSpaceOnUse")
+  .attr("x1", 0).attr("y1", yScale(maxVal))   // 顶：最大值
+  .attr("x2", 0).attr("y2", yScale(minVal));  // 底：最小值
+
+gradient.selectAll("stop")
+  .data([
+    { offset: "0%",   color: colorStops[0] },
+    { offset: "50%",  color: colorStops[1] },
+    { offset: "100%", color: colorStops[2] }
+  ])
+  .enter()
+  .append("stop")
+    .attr("offset", d => d.offset)
+    .attr("stop-color", d => d.color);
+/* ---------------------------------------------- */
+
 
 
   // 3. Axes
@@ -314,8 +329,10 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
     .attr("class", "glucose-line")
     .attr("d", lineGenerator)
     .attr("fill", "none")
-    .attr("stroke", "url(#glucoseGradient)") 
-    .attr("stroke-width", 2);
+    .attr("stroke", `url(#${gradientId})`) 
+    .attr("stroke-width", 3)
+    .attr("stroke-linecap", "round")
+    .attr("stroke-linejoin", "round");
 
   // 7. Tooltip setup
   let tooltip = d3.select("#tooltip");
@@ -345,7 +362,7 @@ function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
       .attr("cx", d => xScale(d.minutes_after))
       .attr("cy", d => yScale(d.value))
       .attr("r", 4)
-      .attr("fill", "#D32F2F")
+      .attr("fill", colorStops[2]) // Use the last color stop for dots
       .attr("opacity", 0.8)
       .on("mouseover", function(event, d) {
         d3.select(this)
