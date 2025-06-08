@@ -116,51 +116,10 @@ function drawAllCharts(pid, startTimeStr, windowHours) {
       yLabel: "Glucose (mg/dL)"
     });
 
-    // 3b. EDA
-    plotEDA(partNum, pid, start, end);
-
-    // 3c. HR
     plotHR (partNum, pid, start, end);
   });
 }
 
-// -----------------------
-// 4. plotEDA: 1-min averages
-// -----------------------
-function plotEDA(partNum, pid, start, end) {
-  d3.csv(`data_p${partNum}/EDA_${pid}.csv`).then(raw => {
-    const filtered = raw
-      .map(d => ({ timestamp: new Date(d.datetime), value: +d.eda }))
-      .filter(d => d.timestamp >= start && d.timestamp <= end);
-
-    filtered.forEach(d => {
-      d.minutes_after = (d.timestamp - start)/60000;
-    });
-
-    const bins = new Map();
-    filtered.forEach(d => {
-      const m = Math.floor(d.minutes_after);
-      if (!bins.has(m)) bins.set(m, { sum:0, count:0 });
-      const b = bins.get(m);
-      b.sum   += d.value;
-      b.count += 1;
-    });
-
-    const edaData = Array.from(bins.entries())
-      .map(([m, {sum,count}]) => ({
-        minutes_after: m + 0.5,
-        value:         sum/count
-      }))
-      .sort((a,b)=>a.minutes_after - b.minutes_after);
-
-    d3.select("#edaChart").html("");
-    drawLineChart(edaData, "#edaChart", {
-      title:  "💧 EDA (µS) After Meal",
-      xLabel: "Minutes Since Meal",
-      yLabel: "EDA (µS)"
-    });
-  });
-}
 
 // -----------------------
 // 5. plotHR: 1-min averages
@@ -203,140 +162,327 @@ function plotHR(partNum, pid, start, end) {
 // -----------------------
 // 6. drawLineChart: clipped + x-only zoom + tooltip
 // -----------------------
-function drawLineChart(data, container, { title, xLabel, yLabel }) {
-  const m = { top:50, right:30, bottom:50, left:60 };
-  const W = 800, H = 350;
-  const w = W - m.left - m.right;
-  const h = H - m.top  - m.bottom;
+function drawLineChart(data, containerSelector, { title, xLabel, yLabel }) {
+  // 1. SVG & margins
+  const margin = { top: 50, right: 30, bottom: 50, left: 60 };
+  const outerWidth  = 1000;
+  const outerHeight = 500;
+  const width  = outerWidth  - margin.left - margin.right;
+  const height = outerHeight - margin.top  - margin.bottom;
 
-  // Clear & create SVG
-  d3.select(container).html("");
-  const svg = d3.select(container)
-    .style("display","flex").style("justify-content","center")
-    .append("svg").attr("width",W).attr("height",H)
-    .append("g").attr("transform",`translate(${m.left},${m.top})`);
+  // 1a. Clear container & append SVG
+  d3.select(containerSelector).html("");
+  const svgRoot = d3.select(containerSelector)
+    .style("display", "flex")
+    .style("justify-content", "center")
+    .append("svg")
+      .attr("width",  outerWidth)
+      .attr("height", outerHeight);
 
-  // Clip path
-  svg.append("defs")
-    .append("clipPath").attr("id","plot-clip")
-    .append("rect").attr("width",w).attr("height",h);
+  // 1b. Define clipPath
+  svgRoot.append("defs")
+    .append("clipPath")
+      .attr("id", "plot-clip")
+    .append("rect")
+      .attr("width",  width)
+      .attr("height", height);
 
-  // Scales
-  const xMax = d3.max(data, d=>d.minutes_after);
-  const xScale = d3.scaleLinear().domain([0,xMax]).range([0,w]);
-  const yE = d3.extent(data, d=>d.value);
-  const pad= (yE[1]-yE[0])*0.1;
-  const yScale = d3.scaleLinear()
-    .domain([yE[0]-pad,yE[1]+pad]).range([h,0]);
+  // 1c. Main <g> shifted by margins
+  const g = svgRoot.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Axes
+  // 2. Scales
+  const xMax = d3.max(data, d => d.minutes_after);
+  const xScale = d3.scaleLinear()
+    .domain([0, xMax])
+    .range([0, width]);
+
+  // ===== NEW Y-SCALE  (fix upper bound so high-risk band shows) =====
+const yExtent = d3.extent(data, d => d.value);
+
+// 默认直接用数据范围；如果是“#glucoseChart”就强行给更大的缓冲
+let yBottom, yTop;
+if (containerSelector.includes("glucose")) {
+  // 血糖图：顶部至少 200，底部至少 50，让绿色区块也露出来
+  yTop    = Math.max(yExtent[1], 200);   // 高出 180 → 高危区一定可见
+  yBottom = Math.min(yExtent[0], 50);    // 给低值留余量
+} else {
+  // 心率图：照旧，只加 10% padding
+  const pad = (yExtent[1] - yExtent[0]) * 0.1;
+  yTop    = yExtent[1] + pad;
+  yBottom = yExtent[0] - pad;
+}
+
+const yScale = d3.scaleLinear()
+  .domain([yBottom, yTop])   // 低 → 高（range 已是 [height,0]）
+  .range([height, 0])
+  .nice();
+// ===============================================================
+
+
+  /* ---------- BOLDER PER-CHART GRADIENT ---------- */
+const minVal = d3.min(data, d => d.value);
+const maxVal = d3.max(data, d => d.value);
+
+// ① 基于容器名生成唯一 ID
+const gradientId = `${containerSelector.replace('#','')}-gradient`;
+
+// ② 给不同图分配颜色组（想统一只留一组即可）
+const colorStops = containerSelector.includes('glucose') ?     // 血糖：红系
+  ["#FFEBEE", "#EF5350", "#7B1C1C"] :
+  containerSelector.includes('hr') ?                           // 心率：蓝系
+  ["#E3F2FD", "#42A5F5", "#0D47A1"] :
+  ["#FFFDE7", "#FFEB3B", "#F9A825"];                           // 其他：黄系示例
+
+// ③ 画 <linearGradient>
+const defs = svgRoot.append("defs");
+const gradient = defs.append("linearGradient")
+  .attr("id", gradientId)
+  .attr("gradientUnits", "userSpaceOnUse")
+  .attr("x1", 0).attr("y1", yScale(minVal))   
+  .attr("x2", 0).attr("y2", yScale(maxVal));  
+
+gradient.selectAll("stop")
+  .data([
+    { offset: "0%",   color: colorStops[0] },
+    { offset: "50%",  color: colorStops[1] },
+    { offset: "100%", color: colorStops[2] }
+  ])
+  .enter()
+  .append("stop")
+    .attr("offset", d => d.offset)
+    .attr("stop-color", d => d.color);
+/* ---------------------------------------------- */
+
+
+
+  // 3. Axes
   const xAxis = d3.axisBottom(xScale)
-    .ticks(Math.min(10,Math.ceil(xMax/5))).tickFormat(d=>d);
+    .ticks(Math.min(10, Math.ceil(xMax / 5)))
+    .tickFormat(d => d);
+
   const yAxis = d3.axisLeft(yScale).ticks(6);
 
-  const gx = svg.append("g")
-    .attr("transform",`translate(0,${h})`).call(xAxis);
-  svg.append("text")
-    .attr("x",w/2).attr("y",h+m.bottom-10)
-    .attr("text-anchor","middle").style("font-size","13px")
+  // 3a. Draw X axis
+  const gx = g.append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(xAxis);
+
+  // X-axis label
+  g.append("text")
+    .attr("x", width / 2)
+    .attr("y", height + margin.bottom - 10)
+    .attr("text-anchor", "middle")
+    .style("font-size", "13px")
     .text(xLabel);
 
-  svg.append("g").call(yAxis);
-  svg.append("text")
-    .attr("transform","rotate(-90)")
-    .attr("y",-m.left+15).attr("x",-h/2)
-    .attr("text-anchor","middle").style("font-size","13px")
+  // 3b. Draw Y axis
+  g.append("g").call(yAxis);
+
+  // Y-axis label
+  g.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", -margin.left + 15)
+    .attr("x", -height / 2)
+    .attr("text-anchor", "middle")
+    .style("font-size", "13px")
     .text(yLabel);
 
-  // Plot area
-  const plot = svg.append("g")
-    .attr("clip-path","url(#plot-clip)");
+  // 4. Plot area (clipped)
+  const plotArea = g.append("g")
+    .attr("clip-path", "url(#plot-clip)");
 
-  // Zoom/pan (x-axis only)
+  
+  /* ---------- NEW: safe-zone (70–140) & high-risk (≥180) bands ---------- */
+if (containerSelector.includes("glucose")) {             // 只给血糖图加
+  // ① 绿色安全带：70–140 mg/dL
+  const safeTop    = yScale(140);
+  const safeBottom = yScale(70);
+  plotArea.append("rect")
+    .attr("x", 0)
+    .attr("y", safeTop)
+    .attr("width",  width)
+    .attr("height", safeBottom - safeTop)
+    .attr("fill", "#C8E6C9")        // Material Green 100
+    .attr("opacity", 0.35)
+    .style("pointer-events", "none");
+
+    // 黄色注意区：140–180 mg/dL
+  const cautionTop    = yScale(180);
+  const cautionBottom = yScale(140);
+  plotArea.append("rect")
+  .attr("x", 0)
+  .attr("y", cautionTop)
+  .attr("width", innerWidth)       // ← 用你的绘图区宽度变量
+  .attr("height", cautionBottom - cautionTop)
+  .attr("fill", "#FFF9C4")         // Material Yellow 100
+  .attr("opacity", 0.45)
+  .style("pointer-events", "none");
+
+
+  // ② 红色高危带：≥180 mg/dL（如果数据没到 180 就不画）
+  if (yScale.domain()[1] > 180) {
+    const riskTop    = yScale(Math.max(yScale.domain()[1], 180)); // 图顶或更高
+    const riskBottom = yScale(180);
+    plotArea.append("rect")
+      .attr("x", 0)
+      .attr("y", riskTop)
+      .attr("width",  width)
+      .attr("height", riskBottom - riskTop)
+      .attr("fill", "#FFCDD2")      // Material Red 100
+      .attr("opacity", 0.4)
+      .style("pointer-events", "none");
+  }
+}
+/* --------------------------------------------------------------------- */
+
+
+  // 5. Zoom & pan (horizontal only)
   const zoom = d3.zoom()
-    .scaleExtent([1,10])
-    .translateExtent([[0,0],[w,0]])
-    .extent([[0,0],[w,h]])
-    .on("zoom",({transform})=>{
+    .scaleExtent([1, 10])
+    .translateExtent([[0, 0], [width, 0]])   // lock vertical panning
+    .extent([[0, 0], [width, height]])
+    .on("zoom", ({ transform }) => {
       let zx = transform.rescaleX(xScale);
-      let [d0,d1] = zx.domain();
-      if(d0<0)d0=0; if(d1>xMax)d1=xMax;
-      zx = zx.copy().domain([d0,d1]);
+      // Clamp domain to [0, xMax]
+      let [d0, d1] = zx.domain();
+      if (d0 < 0)    d0 = 0;
+      if (d1 > xMax) d1 = xMax;
+      zx = zx.copy().domain([d0, d1]);
+
+      // Update x-axis
       gx.call(xAxis.scale(zx));
-      plot.selectAll(".line")
+
+      // Redraw line with new zx
+      plotArea.selectAll(".glucose-line")
         .attr("d", d3.line()
-          .x(d=>zx(d.minutes_after))
-          .y(d=>yScale(d.value))
+          .x(d => zx(d.minutes_after))
+          .y(d => yScale(d.value))
           .curve(d3.curveMonotoneX)
         );
-      plot.selectAll(".dot")
-        .attr("cx",d=>zx(d.minutes_after))
-        .attr("cy",d=>yScale(d.value));
+
+      // Move circles horizontally
+      plotArea.selectAll(".glucose-dot")
+        .attr("cx", d => zx(d.minutes_after))
+        .attr("cy", d => yScale(d.value));
     });
 
-  plot.append("rect")
-    .attr("width",w).attr("height",h)
-    .style("fill","none").style("pointer-events","all")
+  // Transparent rect to capture zoom events (below circles)
+  plotArea.append("rect")
+    .attr("width",  width)
+    .attr("height", height)
+    .style("fill", "none")
+    .style("pointer-events", "all")
     .call(zoom);
 
-  // Line
-  plot.append("path")
+  // 6. Draw the line
+  const lineGenerator = d3.line()
+    .x(d => xScale(d.minutes_after))
+    .y(d => yScale(d.value))
+    .curve(d3.curveMonotoneX);
+
+  plotArea.append("path")
     .datum(data)
-    .attr("class","line")
-    .attr("fill","none")
-    .attr("stroke","#D32F2F")
-    .attr("stroke-width",2)
-    .attr("d",d3.line()
-      .x(d=>xScale(d.minutes_after))
-      .y(d=>yScale(d.value))
-      .curve(d3.curveMonotoneX)
-    );
+    .attr("class", "glucose-line")
+    .attr("d", lineGenerator)
+    .attr("fill", "none")
+    .attr("stroke", `url(#${gradientId})`) 
+    .attr("stroke-width", 3)
+    .attr("stroke-linecap", "round")
+    .attr("stroke-linejoin", "round");
 
-  // Tooltip
-  let tip = d3.select("#tooltip");
-  if(tip.empty()) {
-    tip = d3.select("body").append("div").attr("id","tooltip");
+    /* ---------- 6½. Mean reference line ----------------------------------- */
+// ① 计算均值
+const meanVal = d3.mean(data, d => d.value);
+
+// ② 画横向虚线
+plotArea.append("line")
+  .attr("class", "mean-line")
+  .attr("x1", 0)
+  .attr("x2", width)
+  .attr("y1", yScale(meanVal))
+  .attr("y2", yScale(meanVal))
+  .attr("stroke", containerSelector.includes("glucose") ? "#880E4F" : "#0D47A1") // 红/蓝
+  .attr("stroke-width", 1.5)
+  .attr("stroke-dasharray", "4 4")      // 虚线
+  .style("pointer-events", "none");
+
+// ③ 可选：在右上角标注均值数值
+plotArea.append("text")
+  .attr("x", width - 4)                 // 靠右
+  .attr("y", yScale(meanVal) - 6)       // 稍上移
+  .attr("text-anchor", "end")
+  .attr("font-size", "0.75rem")
+  .attr("fill", "#555")
+  .text(`Mean: ${meanVal.toFixed(1)}`);
+/* ----------------------------------------------------------------------- */
+
+
+
+
+  // 7. Tooltip setup
+  let tooltip = d3.select("#tooltip");
+  if (tooltip.empty()) {
+    tooltip = d3.select("body")
+      .append("div")
+      .attr("id", "tooltip");
   }
-  tip.style("position","absolute")
-     .style("pointer-events","none")
-     .style("display","none")
-     .style("z-index",10)
-     .style("background","rgba(255,255,255,0.95)")
-     .style("border","1px solid #ccc")
-     .style("padding","8px")
-     .style("border-radius","4px")
-     .style("font-size","12px")
-     .style("box-shadow","0 2px 6px rgba(0,0,0,0.1)");
+  tooltip
+    .style("position", "absolute")
+    .style("pointer-events", "none")
+    .style("display", "none")
+    .style("z-index", 10)
+    .style("background-color", "rgba(255,255,255,0.95)")
+    .style("border", "1px solid #ccc")
+    .style("padding", "8px")
+    .style("border-radius", "4px")
+    .style("font-size", "12px")
+    .style("box-shadow", "0 2px 6px rgba(0, 0, 0, 0.1)");
 
-  // Dots
-  plot.selectAll(".dot")
-    .data(data).enter()
+  // 8. Draw dots on top
+  plotArea.selectAll(".glucose-dot")
+    .data(data)
+    .enter()
     .append("circle")
-      .attr("class","dot")
-      .attr("cx",d=>xScale(d.minutes_after))
-      .attr("cy",d=>yScale(d.value))
-      .attr("r",4).attr("fill","#D32F2F").attr("opacity",0.8)
-      .on("mouseover",function(event,d){
-        d3.select(this).attr("r",6).attr("fill","#E57373");
-        tip.html(`<strong>${d.minutes_after.toFixed(0)} min</strong><br/>${d.value.toFixed(2)}`)
-           .style("left",`${event.pageX+10}px`)
-           .style("top", `${event.pageY-28}px`)
-           .style("display","inline-block");
+      .attr("class", "glucose-dot")
+      .attr("cx", d => xScale(d.minutes_after))
+      .attr("cy", d => yScale(d.value))
+      .attr("r", 4)
+      .attr("fill", colorStops[2]) // Use the last color stop for dots
+      .attr("opacity", 0.8)
+      .on("mouseover", function(event, d) {
+        d3.select(this)
+          .attr("r", 6)
+          .attr("fill", colorStops[1]);
+
+        tooltip
+          .style("left", (event.pageX + 10) + "px")
+          .style("top",  (event.pageY - 28) + "px")
+          .style("display", "inline-block")
+          .html(`
+            <strong>${d.minutes_after.toFixed(0)} min</strong><br/>
+            Value: ${d.value.toFixed(1)}
+          `);
       })
-      .on("mousemove",function(event){
-        tip.style("left",`${event.pageX+10}px`)
-           .style("top", `${event.pageY-28}px`);
+      .on("mousemove", function(event) {
+        tooltip
+          .style("left", (event.pageX + 10) + "px")
+          .style("top",  (event.pageY - 28) + "px");
       })
-      .on("mouseout",function(){
-        d3.select(this).attr("r",4).attr("fill","#D32F2F");
-        tip.style("display","none");
+      .on("mouseout", function() {
+        d3.select(this)
+          .attr("r", 4)
+          .attr("fill", colorStops[2]);
+        tooltip.style("display", "none");
       });
 
-  // Title
-  svg.append("text")
-    .attr("x",w/2).attr("y",-m.top/2+5)
-    .attr("text-anchor","middle")
-    .style("font-size","16px").style("font-weight","600")
+  // 9. Chart title
+  g.append("text")
+    .attr("x", width / 2)
+    .attr("y", -margin.top / 2 + 5)
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("font-weight", "600")
     .text(title);
   
     /* ---------------- 7. Legend (only for glucose chart) ------------------ */
