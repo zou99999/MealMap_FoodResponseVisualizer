@@ -423,42 +423,6 @@ plotArea.append("text")
 /* ----------------------------------------------------------------------- */
 
 
-/* ---------------- 7. Legend (only for glucose chart) ------------------ */
-if (containerSelector.includes("glucose")) {
-  const legendData = [
-    { label: "≥180 mg/dL  高危",  color: "#FFCDD2" },  // 红
-    { label: "140–180 mg/dL  注意", color: "#FFF9C4" }, // 黄
-    { label: "70–140 mg/dL  安全",  color: "#C8E6C9" }  // 绿
-  ];
-
-  const legend = svgRoot.append("g")
-    .attr("class", "risk-legend")
-    .attr("font-size", "0.8rem")
-    .attr("transform",
-      `translate(${margin.left}, ${margin.top + innerHeight + 32})`);  // 图底往下 32px
-
-  const item = legend.selectAll("g.item")
-    .data(legendData)
-    .enter()
-    .append("g")
-      .attr("class", "item")
-      .attr("transform", (_, i) => `translate(${i * 160}, 0)`);        // 每项左右间隔 160px
-
-  // 彩色方块
-  item.append("rect")
-    .attr("width", 18)
-    .attr("height", 18)
-    .attr("fill", d => d.color)
-    .attr("stroke", "#666")
-    .attr("stroke-width", 0.5);
-
-  // 文字标签
-  item.append("text")
-    .attr("x", 24)            // 方块右侧 6px
-    .attr("y", 13)            // 垂直略居中
-    .text(d => d.label);
-}
-/* --------------------------------------------------------------------- */
 
 
   // 7. Tooltip setup
@@ -525,6 +489,44 @@ if (containerSelector.includes("glucose")) {
     .style("font-size", "16px")
     .style("font-weight", "600")
     .text(title);
+  
+    /* ---------------- 7. Legend (only for glucose chart) ------------------ */
+if (containerSelector.includes("glucose")) {
+  const legendData = [
+    { label: "High-risk (≥180 mg/dL)",  color: "#FFCDD2" },  // 红
+    { label: "Elevated (140–180 mg/dL)", color: "#FFF9C4" }, // 黄
+    { label: "Target (70–140 mg/dL)",  color: "#C8E6C9" }  // 绿
+  ];
+
+  const legend = svgRoot.append("g")
+    .attr("class", "risk-legend")
+    .attr("font-size", "0.8rem")
+    .attr("transform",
+      `translate(${margin.left}, ${margin.top + innerHeight + 32})`);  // 图底往下 32px
+
+  const item = legend.selectAll("g.item")
+    .data(legendData)
+    .enter()
+    .append("g")
+      .attr("class", "item")
+      .attr("transform", (_, i) => `translate(${i * 160}, 0)`);        // 每项左右间隔 160px
+
+  // 彩色方块
+  item.append("rect")
+    .attr("width", 18)
+    .attr("height", 18)
+    .attr("fill", d => d.color)
+    .attr("stroke", "#666")
+    .attr("stroke-width", 0.5);
+
+  // 文字标签
+  item.append("text")
+    .attr("x", 24)            // 方块右侧 6px
+    .attr("y", 13)            // 垂直略居中
+    .text(d => d.label);
+}
+/* --------------------------------------------------------------------- */
+
 }
 
 const second = document.getElementById("fadeSecond");
