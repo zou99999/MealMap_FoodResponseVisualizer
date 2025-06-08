@@ -312,6 +312,19 @@ if (containerSelector.includes("glucose")) {             // 只给血糖图加
     .attr("opacity", 0.35)
     .style("pointer-events", "none");
 
+    // 黄色注意区：140–180 mg/dL
+  const cautionTop    = yScale(180);
+  const cautionBottom = yScale(140);
+  plotArea.append("rect")
+  .attr("x", 0)
+  .attr("y", cautionTop)
+  .attr("width", innerWidth)       // ← 用你的绘图区宽度变量
+  .attr("height", cautionBottom - cautionTop)
+  .attr("fill", "#FFF9C4")         // Material Yellow 100
+  .attr("opacity", 0.45)
+  .style("pointer-events", "none");
+
+
   // ② 红色高危带：≥180 mg/dL（如果数据没到 180 就不画）
   if (yScale.domain()[1] > 180) {
     const riskTop    = yScale(Math.max(yScale.domain()[1], 180)); // 图顶或更高
