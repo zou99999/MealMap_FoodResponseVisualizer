@@ -280,6 +280,38 @@ gradient.selectAll("stop")
   const plotArea = g.append("g")
     .attr("clip-path", "url(#plot-clip)");
 
+  
+  /* ---------- NEW: safe-zone (70–140) & high-risk (≥180) bands ---------- */
+if (containerSelector.includes("glucose")) {             // 只给血糖图加
+  // ① 绿色安全带：70–140 mg/dL
+  const safeTop    = yScale(140);
+  const safeBottom = yScale(70);
+  plotArea.append("rect")
+    .attr("x", 0)
+    .attr("y", safeTop)
+    .attr("width",  width)
+    .attr("height", safeBottom - safeTop)
+    .attr("fill", "#C8E6C9")        // Material Green 100
+    .attr("opacity", 0.35)
+    .style("pointer-events", "none");
+
+  // ② 红色高危带：≥180 mg/dL（如果数据没到 180 就不画）
+  if (yScale.domain()[1] > 180) {
+    const riskTop    = yScale(Math.max(yScale.domain()[1], 180)); // 图顶或更高
+    const riskBottom = yScale(180);
+    plotArea.append("rect")
+      .attr("x", 0)
+      .attr("y", riskTop)
+      .attr("width",  width)
+      .attr("height", riskBottom - riskTop)
+      .attr("fill", "#FFCDD2")      // Material Red 100
+      .attr("opacity", 0.4)
+      .style("pointer-events", "none");
+  }
+}
+/* --------------------------------------------------------------------- */
+
+
   // 5. Zoom & pan (horizontal only)
   const zoom = d3.zoom()
     .scaleExtent([1, 10])
