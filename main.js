@@ -316,42 +316,61 @@ gradient.selectAll("stop")
 
   
   /* ---------- NEW: safe-zone (70–140) & high-risk (≥180) bands ---------- */
-if (containerSelector.includes("glucose")) {             // 只给血糖图加
-  // ① 绿色安全带：70–140 mg/dL
+if (containerSelector.includes("glucose")) {            
   const safeTop    = yScale(140);
   const safeBottom = yScale(70);
-  plotArea.append("rect")
-    .attr("x", 0)
-    .attr("y", safeTop)
-    .attr("width",  width)
-    .attr("height", safeBottom - safeTop)
-    .attr("fill", "#C8E6C9")        // Material Green 100
-    .attr("opacity", 0.35)
-    .style("pointer-events", "none");
 
-    // 黄色注意区：140–180 mg/dL
+  // Define line generator **first**
+const lineGenerator = d3.line()
+.x(d => xScale(d.minutes_after))
+.y(d => yScale(d.value))
+.curve(d3.curveMonotoneX);
+
+// Now use it to create path
+const path = plotArea.append("path")
+.datum(data)
+.attr("class", "glucose-line")
+.attr("d", lineGenerator)
+.attr("fill", "none")
+.attr("stroke", `url(#${gradientId})`)
+.attr("stroke-width", 3)
+.attr("stroke-linecap", "round")
+.attr("stroke-linejoin", "round");
+
+// Animate drawing the line
+const totalLength = path.node().getTotalLength();
+path
+.attr("stroke-dasharray", `${totalLength} ${totalLength}`)
+.attr("stroke-dashoffset", totalLength)
+.transition()
+.duration(1800)
+.ease(d3.easeLinear)
+.attr("stroke-dashoffset", 0);
+
+
+
+
   const cautionTop    = yScale(180);
   const cautionBottom = yScale(140);
   plotArea.append("rect")
   .attr("x", 0)
   .attr("y", cautionTop)
-  .attr("width", innerWidth)       // ← 用你的绘图区宽度变量
+  .attr("width", innerWidth)
   .attr("height", cautionBottom - cautionTop)
-  .attr("fill", "#FFF9C4")         // Material Yellow 100
+  .attr("fill", "#FFF9C4")
   .attr("opacity", 0.45)
   .style("pointer-events", "none");
 
 
-  // ② 红色高危带：≥180 mg/dL（如果数据没到 180 就不画）
   if (yScale.domain()[1] > 180) {
-    const riskTop    = yScale(Math.max(yScale.domain()[1], 180)); // 图顶或更高
+    const riskTop    = yScale(Math.max(yScale.domain()[1], 180));
     const riskBottom = yScale(180);
     plotArea.append("rect")
       .attr("x", 0)
       .attr("y", riskTop)
       .attr("width",  width)
       .attr("height", riskBottom - riskTop)
-      .attr("fill", "#FFCDD2")      // Material Red 100
+      .attr("fill", "#FFCDD2")
       .attr("opacity", 0.4)
       .style("pointer-events", "none");
   }
@@ -414,10 +433,8 @@ if (containerSelector.includes("glucose")) {             // 只给血糖图加
     .attr("stroke-linejoin", "round");
 
     /* ---------- 6½. Mean reference line ----------------------------------- */
-  // ① 计算均值
   const meanVal = d3.mean(data, d => d.value);
 
-  // ② 画横向虚线
   plotArea.append("line")
     .attr("class", "mean-line")
     .attr("x1", 0)
@@ -426,13 +443,12 @@ if (containerSelector.includes("glucose")) {             // 只给血糖图加
     .attr("y2", yScale(meanVal))
     .attr("stroke", containerSelector.includes("glucose") ? "#880E4F" : "#0D47A1") // 红/蓝
     .attr("stroke-width", 1.5)
-    .attr("stroke-dasharray", "4 4")      // 虚线
+    .attr("stroke-dasharray", "4 4")
     .style("pointer-events", "none");
 
-  // ③ 可选：在右上角标注均值数值
   plotArea.append("text")
-    .attr("x", width - 4)                 // 靠右
-    .attr("y", yScale(meanVal) - 6)       // 稍上移
+    .attr("x", width - 4)
+    .attr("y", yScale(meanVal) - 6)
     .attr("text-anchor", "end")
     .attr("font-size", "0.75rem")
     .attr("fill", "#555")
@@ -895,13 +911,50 @@ document.addEventListener("DOMContentLoaded", () => {
   const cakeBtn = document.getElementById("chooseCake");
   const section2 = document.getElementById("section2");
 
-  function scrollToSection2() {
-    section2.scrollIntoView({ behavior: "smooth" });
+  const resultBox = document.createElement("div");
+  resultBox.className = "vote-result";
+  smoothieBtn?.parentElement?.appendChild(resultBox);
+
+  // Helper: get or init vote counts
+  function getVotes() {
+    return {
+      smoothie: parseInt(localStorage.getItem("votes_smoothie") || "0"),
+      cake: parseInt(localStorage.getItem("votes_cake") || "0")
+    };
   }
 
-  if (smoothieBtn) smoothieBtn.addEventListener("click", scrollToSection2);
-  if (cakeBtn) cakeBtn.addEventListener("click", scrollToSection2);
-}
-);
+  // Helper: update localStorage
+  function saveVotes(votes) {
+    localStorage.setItem("votes_smoothie", votes.smoothie);
+    localStorage.setItem("votes_cake", votes.cake);
+  }
+
+  function handleVote(choice) {
+    const votes = getVotes();
+    if (choice === "smoothie") votes.smoothie += 1;
+    if (choice === "cake") votes.cake += 1;
+    saveVotes(votes);
+
+    // Show result
+    const total = votes.smoothie + votes.cake;
+    const smoothiePercent = Math.round((votes.smoothie / total) * 100);
+    const cakePercent = 100 - smoothiePercent;
+
+    resultBox.innerHTML = `
+      <p style="margin-top:1rem; font-weight:500;">
+        Smoothie!: ${smoothiePercent}% (${votes.smoothie} votes)<br>
+        Cake & Ice Cream!: ${cakePercent}% (${votes.cake} votes)
+      </p>
+    `;
+
+    // Scroll after a pause
+    setTimeout(() => {
+      section2.scrollIntoView({ behavior: "smooth" });
+    }, 1800);
+  }
+
+  if (smoothieBtn) smoothieBtn.addEventListener("click", () => handleVote("smoothie"));
+  if (cakeBtn) cakeBtn.addEventListener("click", () => handleVote("cake"));
+});
 
 window.addEventListener("DOMContentLoaded", drawSection2Glucose);

@@ -17,19 +17,22 @@
 <section id="section1" class="hero-section fade-section">
   <div class="hero-content">
     <h1 class="intro-title">What did you eat this morning?</h1>
-    <p class="intro-subtitle">🌯 A Breakfast Burrito? 🍓 A mixed smoothie? They could "betray" you!!!</p>
+    <p class="intro-subtitle">🌯 A Breakfast Burrito? 🍓 A mixed smoothie?<br> They could "betray" you!!!</p>
+    <p class="scroll-cue">↓ Keep Scrolling ↓</p>
   </div>
 </section>
 
 <!-- SECTION 1b: Belief + Question -->
-<section id="section1b" class="hero-section fade-section">
+<section id="section1b" class="hero-section">
   <div class="hero-content">
-    <p class="intro-text">Most people believe that a smoothie made with veggies and fruit can be a perfect meal replacement. And vegetables and fruits are always our friends, right?</p>
+    <p class="intro-text">Most people believe that a smoothie made with veggies and fruit can be a perfect meal replacement. <br>Vegetables and fruits are always our friends, right?</p>
     <p class="question-text">
-      Take a guess — which do you think is healthier (however you define “healthy”)?<br><br>
-      <button id="chooseSmoothie">🥬 Smoothie</button>
-      <button id="chooseCake">🍰 Cake & Ice Cream</button>
-    </p>
+      <b>Take a guess — which do you think is healthier (however you define “healthy”)?</b>
+      <div class="choice-buttons">
+        <button id="chooseSmoothie">Smoothie!</button>
+        <button id="chooseCake">Cake & Ice Cream!</button>
+      </div>
+    </p>    
   </div>
 </section>
 
@@ -37,64 +40,54 @@
   <!-- SECTION 2a: Reveal + header -->
 <section id="section2" class="hero-section fade-section">
   <div class="hero-content">
+    <h2>...Smoothie may not always be a healthy option!</h2>
     <h2>Let's find out!</h2>
-    <h2>But... Smoothie may not always be a healthy option!</h2>
+    <p class="scroll-cue">↓ Keep Scrolling ↓</p>
   </div>
 </section>
 
 <!-- SECTION 2b: Nutrition explanation + chart -->
 <section id="section2b" class="hero-section fade-section">
   <div class="hero-content">
-    <p>A 20 fl oz. smoothie made with spinach, celery, and banana has about 404 calories, 60g of sugar, and 14g of protein.</p>
-    <p>A piece of cake and a cup of ice cream has about 535 calories, 56g of sugar, and 6.6g of protein.</p>
-    <p>Despite fewer calories and similar sugar, the smoothie can spike your glucose over 160 mg/dL!</p>
+    <p><b>A 20 fl oz. smoothie made with spinach, celery, and banana</b> <br>has about 404 calories, 60g of sugar, and 14g of protein.</p>
+    <p><b>A piece of cake and a cup of ice cream</b> <br>has about 535 calories, 56g of sugar, and 6.6g of protein.</p>
+    <p>Looks similar? However, even with fewer calories and similar sugar, the smoothie can <b>spike your glucose</b> over 160 mg/dL!</p>
   </div>
   <div id="section2GlucoseChart"></div>
+</section>
+<!-- SECTION 2c.1 — Why These Nutrients -->
+<section id="section2c1" class="hero-section fade-section">
+  <div class="hero-content">
+    <h3>Why These Nutrients?</h3>
+    <p>Sugar, protein, and calories are the three key nutrients that shape your body’s glucose response after a meal.</p>
+    <p>Sugar tends to cause sharp spikes. Protein helps slow down that rise. Calories provide overall context — bigger meals, bigger waves.</p>
+    <p class="scroll-cue">↓ Keep Scrolling ↓</p>
+  </div>
+</section>
+
+
+<!-- SECTION 2c.3 — Why Glucose Matters -->
+<section id="section2c3" class="hero-section fade-section">
+  <div class="hero-content">
+    <h3>Why Glucose?</h3>
+    <p>Glucose is one of the clearest signals your body gives you after eating. Carbs turn into glucose — your body’s fuel for muscles, mood, and brainpower.</p>
+    <p><b>Spikes</b> can leave you foggy, tired, and craving more. <br><b>Steady curves</b>That’s why we visualize it.</p>
+    <p class="glucose-note">
+      Everyone’s response is unique<br> — it depends on sleep, stress, time of day, microbiome, and more.<br>
+      This isn’t about good vs. bad food — just asking:<br>
+      <em><b>What does this meal tend to do? Might it affect you similarly?</b></em>
+    </p>
+    <p class="scroll-cue">↓ Start Exploring! ↓</p>
+  </div>
 </section>
 
 <section id="section3" class="hero-section fade-section">
   <div class="hero-content">
-    <h2>Now... Are you curious what kind of meal is actually healthier for you?</h2>
+    <h2>Now... Are you curious what kind of meal is actually healthier for you? And what happens to you body after meals?</h2>
     <p>If you're like us — always debating what to eat today — or you're aiming to meet a nutrient goal...</p>
-    <p>Just input your desired nutrient levels below, and we’ll recommend a close match and show how your body might react. 🔍</p>
+    <p>Just input your desired nutrient levels below! <br>We’ll recommend a close match and show how your body might react. 🔍</p>
   </div>
 </section>
-
-  <!-- <section id="section3" class="hero-section">
-    <div class="hero-content why-content">
-      <h1>Therefore, Are you curious of what type of meal is healthier for you? <br> And what happens to your body after having such a meal? <br> Let's check it out!</h1>
-      <br>
-      <h3>Why Sugar, Protein, and Calories?</h3>
-      <p>
-        Sugar, protein, and calorie content are key factors that influence glucose response:
-        sugar typically drives sharp spikes, protein can help stabilize it, and total calories provide context.
-      </p>
-      <p>
-        By connecting these nutrients to glucose trends, we give users a clearer picture of how different
-        meals affect their energy, focus, and long-term health.
-      </p>
-  
-      <h3>Why Glucose?</h3>
-      <p>
-        Glucose is one of the most revealing signals your body gives you.  
-        When we eat, our bodies break food into nutrients — and carbohydrates become glucose,
-        a form of sugar that fuels everything from your brain to your muscles.
-      </p>
-      <p>
-        Some meals trigger rapid spikes and crashes, leaving you tired, hungry, or unfocused. Others give steady energy, less craving, better mood.
-        By visualizing glucose trends, we get a real-time window into how food affects us.
-      </p>
-  
-      <p class="glucose-note">
-        Everyone’s glucose response is different — depending time of day, gut microbiome,
-        stress, sleep, and even food combinations. We are not judging what food is "bad", only exploring:
-        <em>How does this meal tend to affect the body — and could it affect you similarly?</em>
-      </p>
-  
-      <p id="scrollCue" class="scroll-cue">↓ Scroll to start exploring ↓</p>
-    </div>
-  </section>   -->
-  
 
   <div id="recommendContainer">
     <h2>Enter your planned nutrition build!</h2>
@@ -118,7 +111,7 @@
     <button id="recommendBtn" onclick="recommendFood()">🔍 Recommend Meal</button>
   </div>
   <div class="match-intro">
-    <h2>✅ Closest Meal Match</h2>
+    <h2>Closest Meal Match</h2>
     <p>
       Here’s the meal in our dataset that most closely matches your inputs.<br>
       Curious how your body might have reacted to it? Check the glucose curve below. 📈

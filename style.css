@@ -1,14 +1,26 @@
 /* ================================
    Basic Page & Layout
    ================================ */
-body {
-  margin: 0;
-  padding-top: 60px;
-  font-family: Arial, sans-serif;
-  background-color: #f3f7fa;
-  color: #333;
-}
+   body {
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    line-height: 1.6;
+    letter-spacing: 0.5px;
+    background-color: #fefcf8;
+    color: #333;
+  }  
 
+  .intro-title {
+    white-space: nowrap;
+    font-size: 2.4rem;
+  }
+  
+  .intro-subtitle {
+    max-width: 70ch;
+    margin: 1rem auto;
+    text-align: center;
+    font-size: 1.1rem;
+  }
+  
 /* ================================
    Fixed Navigation Bar
    ================================ */
@@ -353,3 +365,44 @@ h1 {
   outline: 3px solid #ffa;
   transition: outline 0.4s ease-in-out;
 }
+
+.choice-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.choice-buttons button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(to right, #ffd54f, #ffca28);
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.choice-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.choice-buttons button:active {
+  transform: scale(0.98);
+}
+
+.vote-result {
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: center;
+  color: #444;
+  transition: opacity 0.6s ease;
+}
+
+
+
+
