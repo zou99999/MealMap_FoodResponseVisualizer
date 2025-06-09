@@ -21,13 +21,6 @@
     font-size: 1.1rem;
   }
   
-  body {
-    background-image: url("./assets/pixel_breakfast.png"); 
-    background-color: #fff9f3;  /* warm egg-shell base */
-    background-repeat: repeat;
-    background-attachment: fixed;
-    background-size: auto;
-  }
   
 /* ================================
    Fixed Navigation Bar
@@ -305,11 +298,19 @@
   40%                     { transform: translateX(-50%) translateY(-10px); }
   60%                     { transform: translateX(-50%) translateY(-5px); }
 }
+#section1 {
+  background-color: rgba(255, 255, 255, 0.6);  /* soft white overlay */
+  backdrop-filter: blur(1.5px);
+}
+#section2 {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(1.5px);
+}
+#section3 {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(1.5px);
+}
 
-/* Optional: differentiate backgrounds */
-#section1 { background: #e5edf5; }
-#section2 { background: #eef9f1; }
-#section3 { background: #fcf4e1; }
 
 
 #section2GlucoseChart {
@@ -461,6 +462,41 @@ html {
   color: #000;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-image: url("/pixel_breakfast.png");
+  background-repeat: repeat;
+  background-size: auto;
+  background-attachment: fixed;
+  opacity: 0.2;
+  z-index: -1;
+}
+
+.text-wrapper {
+  background-color: rgba(255, 255, 255, 0.7); /* soft white background */
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Apply stronger contrast and light shadow to all readable text */
+.text-wrapper h1,
+.text-wrapper h2,
+.text-wrapper h3,
+.text-wrapper p,
+.text-wrapper li,
+.text-wrapper label,
+.text-wrapper input,
+.text-wrapper select,
+.text-wrapper button {
+  color: #1c1c1c;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.08);
+}
 
 
 
