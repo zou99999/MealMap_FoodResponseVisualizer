@@ -60,6 +60,7 @@ function recommendFood() {
     sortedMatches = allMeals.sort((a, b) => a.distance - b.distance);
     matchIndex = 0;
     displayMatch(windowHours);
+    document.getElementById("recommendContainer").scrollIntoView({ behavior: "smooth" });
   });
 }
 

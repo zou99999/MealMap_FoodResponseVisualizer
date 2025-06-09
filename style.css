@@ -11,7 +11,7 @@
 
   .intro-title {
     white-space: nowrap;
-    font-size: 2.4rem;
+    font-size: 2.8rem;
   }
   
   .intro-subtitle {
@@ -463,7 +463,7 @@ body::before {
   background-repeat: repeat;
   background-size: auto;
   background-attachment: fixed;
-  opacity: 0.2;
+  opacity: 0.15;
   z-index: -1;
 }
 
