@@ -290,3 +290,10 @@ body {
 #section1 { background: #f0f4f8; }
 #section2 { background: #eef9f1; }
 #section3 { background: #fcf4e1; }
+
+
+#section2GlucoseChart {
+  margin: 0 auto;
+  width: 1000px;    /* match your other chart widths */
+  height: 600px;    /* match your SVG height */
+}

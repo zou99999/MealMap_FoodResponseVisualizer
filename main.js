@@ -414,30 +414,30 @@ if (containerSelector.includes("glucose")) {             // 只给血糖图加
     .attr("stroke-linejoin", "round");
 
     /* ---------- 6½. Mean reference line ----------------------------------- */
-// ① 计算均值
-const meanVal = d3.mean(data, d => d.value);
+  // ① 计算均值
+  const meanVal = d3.mean(data, d => d.value);
 
-// ② 画横向虚线
-plotArea.append("line")
-  .attr("class", "mean-line")
-  .attr("x1", 0)
-  .attr("x2", width)
-  .attr("y1", yScale(meanVal))
-  .attr("y2", yScale(meanVal))
-  .attr("stroke", containerSelector.includes("glucose") ? "#880E4F" : "#0D47A1") // 红/蓝
-  .attr("stroke-width", 1.5)
-  .attr("stroke-dasharray", "4 4")      // 虚线
-  .style("pointer-events", "none");
+  // ② 画横向虚线
+  plotArea.append("line")
+    .attr("class", "mean-line")
+    .attr("x1", 0)
+    .attr("x2", width)
+    .attr("y1", yScale(meanVal))
+    .attr("y2", yScale(meanVal))
+    .attr("stroke", containerSelector.includes("glucose") ? "#880E4F" : "#0D47A1") // 红/蓝
+    .attr("stroke-width", 1.5)
+    .attr("stroke-dasharray", "4 4")      // 虚线
+    .style("pointer-events", "none");
 
-// ③ 可选：在右上角标注均值数值
-plotArea.append("text")
-  .attr("x", width - 4)                 // 靠右
-  .attr("y", yScale(meanVal) - 6)       // 稍上移
-  .attr("text-anchor", "end")
-  .attr("font-size", "0.75rem")
-  .attr("fill", "#555")
-  .text(`Mean: ${meanVal.toFixed(1)}`);
-/* ----------------------------------------------------------------------- */
+  // ③ 可选：在右上角标注均值数值
+  plotArea.append("text")
+    .attr("x", width - 4)                 // 靠右
+    .attr("y", yScale(meanVal) - 6)       // 稍上移
+    .attr("text-anchor", "end")
+    .attr("font-size", "0.75rem")
+    .attr("fill", "#555")
+    .text(`Mean: ${meanVal.toFixed(1)}`);
+  /* ----------------------------------------------------------------------- */
 
 
 
@@ -618,3 +618,260 @@ window.addEventListener("scroll", () => {
   }
   apply(sect3, cue3, o3);
 });
+
+function drawMultiLineChart(seriesArr, container, options) {
+  const { title, xLabel, yLabel } = options;
+  const margin = { top: 60, right: 120, bottom: 60, left: 70 };
+  const W = 1000, H = 500;
+  const w = W - margin.left - margin.right;
+  const h = H - margin.top  - margin.bottom;
+
+  // 1) Clear & SVG
+  d3.select(container).html("");
+  const svg = d3.select(container)
+    .append("svg").attr("width", W).attr("height", H);
+
+  // 2) Main group
+  const g = svg.append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  // 3) Clip path
+  svg.append("defs").append("clipPath").attr("id","multi-clip")
+    .append("rect").attr("width", w).attr("height", h);
+
+  // 4) Scales
+  const allData = seriesArr.flatMap(s => s.data);
+  const xMax = d3.max(allData, d => d.minutes_after);
+  const xScale = d3.scaleLinear().domain([0, xMax]).range([0, w]);
+  const yExtent = d3.extent(allData, d => d.value);
+  const yPad = (yExtent[1] - yExtent[0]) * 0.1;
+  const yScale = d3.scaleLinear()
+    .domain([yExtent[0] - yPad, yExtent[1] + yPad])
+    .range([h, 0]);
+
+  // 5) Axes with larger text
+  const xAxis = d3.axisBottom(xScale).ticks(8).tickFormat(d=>d);
+  const yAxis = d3.axisLeft(yScale).ticks(6);
+
+  const xAxisG = g.append("g")
+    .attr("transform", `translate(0,${h})`)
+    .call(xAxis)
+    .selectAll("text")
+      .style("font-size", "14px");
+
+  g.append("g")
+    .call(yAxis)
+    .selectAll("text")
+      .style("font-size", "14px");
+
+  // axis labels
+  g.append("text")
+    .attr("x", w/2).attr("y", h + margin.bottom - 10)
+    .attr("text-anchor","middle")
+    .style("font-size","16px")
+    .text(xLabel);
+
+  g.append("text")
+    .attr("transform","rotate(-90)")
+    .attr("y", -margin.left + 20)
+    .attr("x", -h/2)
+    .attr("text-anchor","middle")
+    .style("font-size","16px")
+    .text(yLabel);
+
+  // 6) Title
+  g.append("text")
+    .attr("x", w/2).attr("y", -margin.top/2 + 10)
+    .attr("text-anchor","middle")
+    .style("font-size","20px")
+    .style("font-weight","600")
+    .text(title);
+
+  // 7) Zoom behaviour
+  const zoom = d3.zoom()
+    .scaleExtent([1, 10])
+    .translateExtent([[0,0],[w,0]])
+    .extent([[0,0],[w,h]])
+    .on("zoom", ({transform}) => {
+      const zx = transform.rescaleX(xScale);
+      xAxisG.call(xAxis.scale(zx));
+      seriesArr.forEach((_, i) => {
+        g.select(`.line${i}`)
+          .attr("d", lineGen.x(d => zx(d.minutes_after)));
+        g.selectAll(`.dot${i}`)
+          .attr("cx", d => zx(d.minutes_after));
+      });
+    });
+
+  g.append("rect")
+    .attr("width", w).attr("height", h)
+    .style("fill","none").style("pointer-events","all")
+    .attr("clip-path","url(#multi-clip)")
+    .call(zoom);
+
+  // 8) Line generator (smooth)
+  const lineGen = d3.line()
+    .x(d => xScale(d.minutes_after))
+    .y(d => yScale(d.value))
+    .curve(d3.curveCatmullRom.alpha(0.5));
+
+  // 9) Tooltip
+  let tooltip = d3.select("#tooltip");
+  if (tooltip.empty()) {
+    tooltip = d3.select("body").append("div").attr("id","tooltip")
+      .style("position","absolute")
+      .style("pointer-events","none")
+      .style("background","rgba(255,255,255,0.95)")
+      .style("border","1px solid #ccc")
+      .style("padding","8px")
+      .style("border-radius","4px")
+      .style("font-size","12px")
+      .style("box-shadow","0 2px 6px rgba(0,0,0,0.1)")
+      .style("display","none");
+  }
+
+  // 10) Draw lines & dots
+  seriesArr.forEach((s, i) => {
+    // path
+    g.append("path")
+      .datum(s.data)
+      .attr("class", `line${i}`)
+      .attr("clip-path","url(#multi-clip)")
+      .attr("fill","none")
+      .attr("stroke", s.color)
+      .attr("stroke-width", 4)
+      .attr("stroke-linecap","round")
+      .attr("stroke-linejoin","round")
+      .attr("d", lineGen);
+
+    // dots
+    g.selectAll(`.dot${i}`)
+      .data(s.data)
+      .enter().append("circle")
+        .attr("class", `dot${i}`)
+        .attr("clip-path","url(#multi-clip)")
+        .attr("cx", d => xScale(d.minutes_after))
+        .attr("cy", d => yScale(d.value))
+        .attr("r", 5)
+        .attr("fill", s.color)
+        .attr("opacity", 0.8)
+        .on("mouseover", (ev,d) => {
+          tooltip.html(`<strong>${s.label}</strong><br/>
+                        ${d.minutes_after.toFixed(0)} min: ${d.value.toFixed(0)} mg/dL`)
+            .style("left", `${ev.pageX+10}px`)
+            .style("top", `${ev.pageY-28}px`)
+            .style("display","inline-block");
+        })
+        .on("mousemove", ev => {
+          tooltip.style("left", `${ev.pageX+10}px`)
+                 .style("top", `${ev.pageY-28}px`);
+        })
+        .on("mouseout", () => tooltip.style("display","none"));
+  });
+
+  // 11) Legend
+  const legend = g.append("g")
+    .attr("class", "legend")
+    // place top-right of the plot area, offset inwards
+    .attr("transform", `translate(${w - 140}, ${-margin.top/2 + 10})`);
+
+  const itemHeight = 24;
+  seriesArr.forEach((s, i) => {
+    const entry = legend.append("g")
+      .attr("transform", `translate(0, ${i * itemHeight})`);
+
+    // color swatch
+    entry.append("rect")
+      .attr("width", 18)
+      .attr("height", 3)
+      .attr("fill", s.color)
+      .attr("y", -4);
+
+    // label text, no wrapping
+    entry.append("text")
+      .attr("x", 24)
+      .attr("y", 0)
+      .style("font-size", "14px")
+      .style("alignment-baseline", "middle")
+      .style("white-space", "nowrap")
+      .text(s.label);
+  });
+}
+
+function drawSection2Glucose() {
+  const targets = [
+    { calorie:404, sugar:60,  protein:16,  label:"Smoothie", color:"#D32F2F" },
+    { calorie:535, sugar:56,  protein:6.6, label:"Cake & Ice Cream", color:"#1976D2" }
+  ];
+  const windowHours = 2;
+  const scales = { calorie:1000, sugar:100, protein:100 };
+
+  // load all meals
+  const promises = [];
+  for (let i = 1; i <= 14; i++) {
+    if (i===7||i===13) continue;
+    const pid = String(i).padStart(3,"0");
+    promises.push(
+      d3.csv(`data_p${i}/Food_Meal_Aggregated.csv`)
+        .then(data => data.map(d => ({
+          participantId: pid,
+          datetime:      d.datetime,
+          calorie:  +d.calorie||0,
+          sugar:    +d.sugar  ||0,
+          protein:  +d.protein||0
+        })))
+    );
+  }
+
+  Promise.all(promises).then(arrays => {
+    const allMeals = arrays.flat();
+    const bests = targets.map(t => {
+      return allMeals
+        .map(d => {
+          const dc = (d.calorie - t.calorie)/scales.calorie;
+          const ds = (d.sugar   - t.sugar)  /scales.sugar;
+          const dp = (d.protein - t.protein)/scales.protein;
+          return { ...d, distance: Math.hypot(dc,ds,dp), mealTime:new Date(d.datetime)};
+        })
+        .sort((a,b)=>a.distance - b.distance)[0];
+    });
+
+    // now fetch Dexcom and build two series
+    const seriesPromises = bests.map((best, idx) => {
+      const partNum = +best.participantId;
+      const start   = best.mealTime;
+      const end     = new Date(start.getTime() + windowHours*3600000);
+      return d3.csv(`data_p${partNum}/Dexcom_${best.participantId}.csv`)
+        .then(raw => ({
+          label: targets[idx].label,
+          color: targets[idx].color,
+          data: raw
+            .map(d => ({
+              timestamp: new Date(d["Timestamp (YYYY-MM-DDThh:mm:ss)"]),
+              value:     +d["Glucose Value (mg/dL)"]
+            }))
+            .filter(d => d.timestamp >= start && d.timestamp <= end)
+            .map(d => ({
+              minutes_after: (d.timestamp - start)/60000,
+              value:         d.value
+            }))
+        }));
+    });
+
+    Promise.all(seriesPromises).then(seriesArr => {
+      // draw both on one chart
+      drawMultiLineChart(
+        seriesArr,
+        "#section2GlucoseChart",
+        {
+          title:  "🩸 Glucose: Smoothie vs Cake & Ice Cream",
+          xLabel: "Minutes Since Meal",
+          yLabel: "Glucose (mg/dL)"
+        }
+      );
+    });
+  });
+}
+
+// run on load
+window.addEventListener("DOMContentLoaded", drawSection2Glucose);
