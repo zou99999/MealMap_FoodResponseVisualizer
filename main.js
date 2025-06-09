@@ -874,4 +874,34 @@ function drawSection2Glucose() {
 }
 
 // run on load
+// Fade-in on scroll using Intersection Observer
+document.addEventListener("DOMContentLoaded", () => {
+  const fadeSections = document.querySelectorAll(".fade-section");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target); // Optional: only fade once
+      }
+    });
+  }, { threshold: 0.1 });
+
+  fadeSections.forEach(section => observer.observe(section));
+});
+// Smooth scroll on choice button click
+document.addEventListener("DOMContentLoaded", () => {
+  const smoothieBtn = document.getElementById("chooseSmoothie");
+  const cakeBtn = document.getElementById("chooseCake");
+  const section2 = document.getElementById("section2");
+
+  function scrollToSection2() {
+    section2.scrollIntoView({ behavior: "smooth" });
+  }
+
+  if (smoothieBtn) smoothieBtn.addEventListener("click", scrollToSection2);
+  if (cakeBtn) cakeBtn.addEventListener("click", scrollToSection2);
+}
+);
+
 window.addEventListener("DOMContentLoaded", drawSection2Glucose);

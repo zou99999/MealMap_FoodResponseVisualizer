@@ -13,33 +13,54 @@
     <a href="leaderboard/index.html">🏆 View Leaderboard</a>
   </nav>
   
-  <section id="section1" class="hero-section">
-    <div class="hero-content">
-      <h1 class="intro-title">What did you eat this morning?</h1>
-      <h2 class="intro-subtitle">🌯 A Breakfast Burrito? Or a mixed smoothie?</h2>
-      <p class="intro-subtitle">Most people believe that a smoothie made with veggies and fruit can be a perfect meal replacement. And vegetables and fruits are always our friends, right?</p>
-      <br>
-      <p class="intro-text">We use real post-meal data to see how your body likely reacted to what you ate <br>based on 3 major nutrient consumption: sugar, protein, calories.<br>
-      Or if you’re like us -- always debating what to eat -- input your desired nutrient levels,<br> we will get you a close-match recommendation, and show the glucose aftermath.<br>
-      </p>
-      <p class="scroll-cue">↓ Scroll ↓</p>
-    </div>
-  </section>
+  <!-- SECTION 1a: Opening question -->
+<section id="section1" class="hero-section fade-section">
+  <div class="hero-content">
+    <h1 class="intro-title">What did you eat this morning?</h1>
+    <p class="intro-subtitle">🌯 A Breakfast Burrito? 🍓 A mixed smoothie? They could "betray" you!!!</p>
+  </div>
+</section>
 
-  <section id="section2" class="hero-section">
-    <div class="hero-content">
-      <!-- put whatever you like here: headings, images, callouts -->
-      <h2>But, Smoothie may Mot be a healthy option !</h2>
-      <p>A 20 fl oz. smoothies made with spinach, celery, and banana has about 404 calories, 60g of sugar, and 14g of protein.</p>
-      <p>A piece of cake and a cup of ice cream has about 535 calories, 56g of sugar, 6.6g of protein.</p>
-      <p>With less calories and similar sugar content, the smoothie can raise your glucose over 160 mg/dL !</p>
-    </div>
-    <div id="section2GlucoseChart"></div>
-    <!-- optional scroll cue if you want one here too -->
-    <p class="scroll-cue">↓ Keep Scrolling ↓</p>
-  </section>
+<!-- SECTION 1b: Belief + Question -->
+<section id="section1b" class="hero-section fade-section">
+  <div class="hero-content">
+    <p class="intro-text">Most people believe that a smoothie made with veggies and fruit can be a perfect meal replacement. And vegetables and fruits are always our friends, right?</p>
+    <p class="question-text">
+      Take a guess — which do you think is healthier (however you define “healthy”)?<br><br>
+      <button id="chooseSmoothie">🥬 Smoothie</button>
+      <button id="chooseCake">🍰 Cake & Ice Cream</button>
+    </p>
+  </div>
+</section>
 
-  <section id="section3" class="hero-section">
+
+  <!-- SECTION 2a: Reveal + header -->
+<section id="section2" class="hero-section fade-section">
+  <div class="hero-content">
+    <h2>Let's find out!</h2>
+    <h2>But... Smoothie may not always be a healthy option!</h2>
+  </div>
+</section>
+
+<!-- SECTION 2b: Nutrition explanation + chart -->
+<section id="section2b" class="hero-section fade-section">
+  <div class="hero-content">
+    <p>A 20 fl oz. smoothie made with spinach, celery, and banana has about 404 calories, 60g of sugar, and 14g of protein.</p>
+    <p>A piece of cake and a cup of ice cream has about 535 calories, 56g of sugar, and 6.6g of protein.</p>
+    <p>Despite fewer calories and similar sugar, the smoothie can spike your glucose over 160 mg/dL!</p>
+  </div>
+  <div id="section2GlucoseChart"></div>
+</section>
+
+<section id="section3" class="hero-section fade-section">
+  <div class="hero-content">
+    <h2>Now... Are you curious what kind of meal is actually healthier for you?</h2>
+    <p>If you're like us — always debating what to eat today — or you're aiming to meet a nutrient goal...</p>
+    <p>Just input your desired nutrient levels below, and we’ll recommend a close match and show how your body might react. 🔍</p>
+  </div>
+</section>
+
+  <!-- <section id="section3" class="hero-section">
     <div class="hero-content why-content">
       <h1>Therefore, Are you curious of what type of meal is healthier for you? <br> And what happens to your body after having such a meal? <br> Let's check it out!</h1>
       <br>
@@ -72,7 +93,7 @@
   
       <p id="scrollCue" class="scroll-cue">↓ Scroll to start exploring ↓</p>
     </div>
-  </section>  
+  </section>   -->
   
 
   <div id="recommendContainer">
