@@ -12,6 +12,11 @@ function recommendFood() {
   };
   const windowHours = parseInt(document.getElementById("window").value, 10);
 
+  const scales = {
+    calorie:  1000,   // we expect calories up to ~1000 kcal
+    sugar:    100,    // sugar up to ~100 g
+    protein:  100     // protein up to ~100 g
+  };
   // Build an array of Promises, one per participant
   const promises = [];
   for (let i = 1; i <= 14; i++) {
@@ -36,22 +41,23 @@ function recommendFood() {
   Promise.all(promises).then(arrays => {
     const allMeals = arrays.flat();
 
-    // Compute distances
     allMeals.forEach(d => {
-      d.distance = Math.hypot(
-        d.calorie  - target.calorie,
-        d.sugar    - target.sugar,
-        d.protein  - target.protein
-      );
-      // Also parse the meal-time once
+      // 2) compute each normalized difference
+      const dc = (d.calorie  - target.calorie) / scales.calorie;
+      const ds = (d.sugar    - target.sugar)   / scales.sugar;
+      const dp = (d.protein  - target.protein) / scales.protein;
+      // 3) Euclidean in the normalized space
+      d.distance = Math.hypot(dc, ds, dp);
+
+      // parse the meal‐time once
       d.mealTime = new Date(d.datetime);
       d.timeStr  = d.mealTime.toLocaleTimeString([], {
         hour12: false, hour: "2-digit", minute: "2-digit"
       });
     });
 
-    // Sort & keep
-    sortedMatches = allMeals.sort((a,b) => a.distance - b.distance);
+    // Sort & show the best match
+    sortedMatches = allMeals.sort((a, b) => a.distance - b.distance);
     matchIndex = 0;
     displayMatch(windowHours);
   });
@@ -111,7 +117,13 @@ function drawAllCharts(pid, startTimeStr, windowHours) {
         minutes_after: (d.timestamp - start)/60000,
         value:         d.value
       }));
-
+    if (glucoseData.length === 0) {
+    d3.select("#glucoseChart")
+      .html(`<p style="text-align:center;color:#666;padding:1em;">
+               No glucose data<br/>available for this nutrition build. Try another.
+             </p>`);
+    return; 
+  }
     d3.select("#glucoseChart").html("");
     drawLineChart(glucoseData, "#glucoseChart", {
       title:  "🩸 Glucose (mg/dL) After Meal",
@@ -156,7 +168,7 @@ function plotHR(partNum, pid, start, end) {
     if (hrData.length === 0) {
       d3.select("#hrChart")
         .html(`<p style="text-align:center;color:#666;padding:1em;">
-                No heart-rate data<br/>available in this window.
+                No heart-rate data<br/>available for this nutrition build. Try another.
               </p>`);
       return; 
     }
@@ -534,41 +546,75 @@ if (containerSelector.includes("glucose")) {
 
 }
 
-const second = document.getElementById("fadeSecond");
-const scrollCue = document.getElementById("scrollCue");
+// Grab the sections & their arrows
+const sect1 = document.getElementById("section1");
+const sect2 = document.getElementById("section2");
+const sect3 = document.getElementById("section3");
+const cue1  = sect1 .querySelector(".scroll-cue");
+const cue2  = sect2 .querySelector(".scroll-cue");
+const cue3  = sect3 .querySelector(".scroll-cue");
 
-window.addEventListener("scroll", function () {
-  const scrollY = window.scrollY;
+let prevY = window.scrollY;
+const fadeZone = 400;               // px to fade in/out
+const vh       = window.innerHeight - 60;  // section height
 
-  // intro section fade
-  const fadeStart1 = 0;
-  const fadeEnd1 = 300;
-  let opacity1 = 1 - (scrollY - fadeStart1) / (fadeEnd1 - fadeStart1);
-  opacity1 = Math.max(opacity1, 0);
-  document.getElementById("fadeIntro").style.opacity = opacity1;
+window.addEventListener("scroll", () => {
+  const y    = window.scrollY;
+  const down = y > prevY;
+  prevY = y;
 
-  //second
-  const fadeInStart = 200;
-  const fadeInEnd = 500;
-  const fadeOutStart = 700;
-  const fadeOutEnd = 900;
-
-  let opacity2 = 0;
-  if (scrollY > fadeInStart && scrollY < fadeInEnd) {
-    opacity2 = (scrollY - fadeInStart) / (fadeInEnd - fadeInStart);
-  } else if (scrollY >= fadeInEnd && scrollY < fadeOutStart) {
-    opacity2 = 1;
-  } else if (scrollY >= fadeOutStart && scrollY < fadeOutEnd) {
-    opacity2 = 1 - (scrollY - fadeOutStart) / (fadeOutEnd - fadeOutStart);
+  // Utility to apply opacity, translate, and cue
+  function apply(sec, cue, op) {
+    op = Math.max(0, Math.min(1, op));
+    sec.style.opacity   = op;
+    sec.style.transform = `translateY(${(1 - op) * 20}px)`;
+    if (cue) {
+      cue.style.opacity   = op > 0.8 ? 1 : 0;
+      cue.style.transform = op > 0.8
+        ? "translateY(0)"
+        : "translateY(20px)";
+    }
   }
 
-  opacity2 = Math.max(0, Math.min(opacity2, 1));
-  second.style.opacity = opacity2;
-  second.style.transform = `translateY(${(1 - opacity2) * 20}px)`;
-  // scroll cue fade-in
-  const cueTrigger = 500;
-  if (scrollY > cueTrigger) {
-  scrollCue.style.opacity = 1;
-  scrollCue.style.transform = "translateY(0)";
-}
+  // ── Section 1: fade OUT at bottom, scroll‐direction‐independent ──
+  let o1;
+  if (y < vh - fadeZone) {
+    o1 = 1;
+  } else if (y < vh) {
+    o1 = (vh - y) / fadeZone;
+  } else {
+    o1 = 0;
+  }
+  apply(sect1, cue1, o1);
+
+  // ── Section 2: fade IN at top, fade OUT at bottom (only when scrolling down) ──
+  const local2 = y - vh;  // 0 when top of section2 enters view
+  let o2;
+  if (local2 < -fadeZone) {
+    o2 = 0;                              // too far above
+  } else if (local2 < 0) {
+    // fade‐in region at top
+    o2 = (local2 + fadeZone) / fadeZone;
+  } else if (local2 <= vh) {
+    o2 = 1;                              // fully visible
+  } else if (local2 <= vh + fadeZone && down) {
+    // fade‐out region at bottom when scrolling down
+    o2 = (vh + fadeZone - local2) / fadeZone;
+  } else {
+    o2 = 0;                              // below fade‐out zone
+  }
+  apply(sect2, cue2, o2);
+
+  // ── Section 3: fade IN at top, never fade out ──
+  const local3 = y - 2 * vh;
+  let o3;
+  if (local3 < -fadeZone) {
+    o3 = 0;
+  } else if (local3 < 0) {
+    // fade‐in at top
+    o3 = (local3 + fadeZone) / fadeZone;
+  } else {
+    o3 = 1;
+  }
+  apply(sect3, cue3, o3);
 });
