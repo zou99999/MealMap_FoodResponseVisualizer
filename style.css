@@ -34,6 +34,7 @@
   padding: 10px 0;
   z-index: 1000;
   text-align: center;
+
 }
 
 .navbar a {
@@ -298,6 +299,12 @@
   40%                     { transform: translateX(-50%) translateY(-10px); }
   60%                     { transform: translateX(-50%) translateY(-5px); }
 }
+
+/* Optional: differentiate backgrounds */
+#section1 { background: #e5edf5; }
+#section1b { background: #f2e5f5; }
+#section2 { background: #eef9f1; }
+#section3 { background: #fcf4e1; }
 #section1 {
   background-color: rgba(255, 255, 255, 0.6);  /* soft white overlay */
   backdrop-filter: blur(1.5px);
@@ -359,21 +366,6 @@ h1 {
   opacity: 1;
 }
 
-.fade-section {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-
-.fade-section.visible {
-  opacity: 1;
-  transform: translateY(0px);
-}
-
-.hero-section.highlighted {
-  outline: 3px solid #ffa;
-  transition: outline 0.4s ease-in-out;
-}
 
 .choice-buttons {
   display: flex;

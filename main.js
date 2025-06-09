@@ -559,25 +559,15 @@ if (containerSelector.includes("glucose")) {
 
 }
 
-// Grab the sections & their arrows
-const sect1 = document.getElementById("section1");
-const sect2 = document.getElementById("section2");
-const sect3 = document.getElementById("section3");
-const cue1  = sect1 .querySelector(".scroll-cue");
-const cue2  = sect2 .querySelector(".scroll-cue");
-const cue3  = sect3 .querySelector(".scroll-cue");
+document.addEventListener("DOMContentLoaded", () => {
+  const fadeZone = 600;                       // px over which to fade
+  const vh       = window.innerHeight - 60;   // your section height
+  const sections = Array.from(
+    document.querySelectorAll(".hero-section.fade-section")
+  );
 
-let prevY = window.scrollY;
-const fadeZone = 400;               // px to fade in/out
-const vh       = window.innerHeight - 60;  // section height
-
-window.addEventListener("scroll", () => {
-  const y    = window.scrollY;
-  const down = y > prevY;
-  prevY = y;
-
-  // Utility to apply opacity, translate, and cue
-  function apply(sec, cue, op) {
+  // utility to apply opacity/translate to a section + its arrow
+  function applyFade(sec, cue, op) {
     op = Math.max(0, Math.min(1, op));
     sec.style.opacity   = op;
     sec.style.transform = `translateY(${(1 - op) * 20}px)`;
@@ -589,47 +579,32 @@ window.addEventListener("scroll", () => {
     }
   }
 
-  // ── Section 1: fade OUT at bottom, scroll‐direction‐independent ──
-  let o1;
-  if (y < vh - fadeZone) {
-    o1 = 1;
-  } else if (y < vh) {
-    o1 = (vh - y) / fadeZone;
-  } else {
-    o1 = 0;
-  }
-  apply(sect1, cue1, o1);
+  window.addEventListener("scroll", () => {
+    const scrollY = window.scrollY;
 
-  // ── Section 2: fade IN at top, fade OUT at bottom (only when scrolling down) ──
-  const local2 = y - vh;  // 0 when top of section2 enters view
-  let o2;
-  if (local2 < -fadeZone) {
-    o2 = 0;                              // too far above
-  } else if (local2 < 0) {
-    // fade‐in region at top
-    o2 = (local2 + fadeZone) / fadeZone;
-  } else if (local2 <= vh) {
-    o2 = 1;                              // fully visible
-  } else if (local2 <= vh + fadeZone && down) {
-    // fade‐out region at bottom when scrolling down
-    o2 = (vh + fadeZone - local2) / fadeZone;
-  } else {
-    o2 = 0;                              // below fade‐out zone
-  }
-  apply(sect2, cue2, o2);
+    sections.forEach((sec, i) => {
+      const cue   = sec.querySelector(".scroll-cue");
+      const local = scrollY - i * vh;  // 0 when this section’s top hits viewport top
 
-  // ── Section 3: fade IN at top, never fade out ──
-  const local3 = y - 2 * vh;
-  let o3;
-  if (local3 < -fadeZone) {
-    o3 = 0;
-  } else if (local3 < 0) {
-    // fade‐in at top
-    o3 = (local3 + fadeZone) / fadeZone;
-  } else {
-    o3 = 1;
-  }
-  apply(sect3, cue3, o3);
+      let op;
+      if (local < -fadeZone) {
+        op = 0;                           // still well above
+      } else if (local < 0) {
+        op = (local + fadeZone) / fadeZone;  // fading **in** as it enters
+      } else if (local <= vh) {
+        op = 1;                           // fully visible
+      } else if (local <= vh + fadeZone) {
+        op = (vh + fadeZone - local) / fadeZone;  // fading **out** as it leaves
+      } else {
+        op = 0;                           // well below
+      }
+
+      applyFade(sec, cue, op);
+    });
+  });
+
+  // trigger once so things are in place on load
+  window.dispatchEvent(new Event("scroll"));
 });
 
 function drawMultiLineChart(seriesArr, container, options) {
