@@ -627,6 +627,7 @@ function drawMultiLineChart(seriesArr, container, options) {
   // 3) Clip path
   svg.append("defs").append("clipPath").attr("id","multi-clip")
     .append("rect").attr("width", w).attr("height", h);
+    
 
   // 4) Scales
   const allData = seriesArr.flatMap(s => s.data);
