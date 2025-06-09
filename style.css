@@ -300,6 +300,7 @@
 
 /* Optional: differentiate backgrounds */
 #section1 { background: #e5edf5; }
+#section1b { background: #f2e5f5; }
 #section2 { background: #eef9f1; }
 #section3 { background: #fcf4e1; }
 
@@ -350,21 +351,6 @@ h1 {
   opacity: 1;
 }
 
-.fade-section {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
-
-.fade-section.visible {
-  opacity: 1;
-  transform: translateY(0px);
-}
-
-.hero-section.highlighted {
-  outline: 3px solid #ffa;
-  transition: outline 0.4s ease-in-out;
-}
 
 .choice-buttons {
   display: flex;

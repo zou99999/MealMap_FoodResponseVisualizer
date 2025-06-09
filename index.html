@@ -23,7 +23,7 @@
 </section>
 
 <!-- SECTION 1b: Belief + Question -->
-<section id="section1b" class="hero-section">
+<section id="section1b" class="hero-section fade-section">
   <div class="hero-content">
     <p class="intro-text">Most people believe that a smoothie made with veggies and fruit can be a perfect meal replacement. <br>Vegetables and fruits are always our friends, right?</p>
     <p class="question-text">
@@ -32,7 +32,8 @@
         <button id="chooseSmoothie">Smoothie!</button>
         <button id="chooseCake">Cake & Ice Cream!</button>
       </div>
-    </p>    
+    </p>
+    <p class="scroll-cue">↓ Keep Scrolling ↓</p>    
   </div>
 </section>
 
@@ -52,22 +53,24 @@
     <p><b>A 20 fl oz. smoothie made with spinach, celery, and banana</b> <br>has about 404 calories, 60g of sugar, and 14g of protein.</p>
     <p><b>A piece of cake and a cup of ice cream</b> <br>has about 535 calories, 56g of sugar, and 6.6g of protein.</p>
     <p>Looks similar? However, even with fewer calories and similar sugar, the smoothie can <b>spike your glucose</b> over 160 mg/dL!</p>
+    <p class="scroll-cue">↓ Keep Scrolling ↓</p>
   </div>
   <div id="section2GlucoseChart"></div>
 </section>
-<!-- SECTION 2c.1 — Why These Nutrients -->
-<section id="section2c1" class="hero-section fade-section">
+<!-- SECTION 2c — Why These Nutrients -->
+<section id="section2c" class="hero-section fade-section">
   <div class="hero-content">
     <h3>Why These Nutrients?</h3>
     <p>Sugar, protein, and calories are the three key nutrients that shape your body’s glucose response after a meal.</p>
     <p>Sugar tends to cause sharp spikes. Protein helps slow down that rise. Calories provide overall context — bigger meals, bigger waves.</p>
     <p class="scroll-cue">↓ Keep Scrolling ↓</p>
   </div>
+  <p class="scroll-cue">↓ Keep Scrolling ↓</p>
 </section>
 
 
-<!-- SECTION 2c.3 — Why Glucose Matters -->
-<section id="section2c3" class="hero-section fade-section">
+<!-- SECTION 2d — Why Glucose Matters -->
+<section id="section2d" class="hero-section fade-section">
   <div class="hero-content">
     <h3>Why Glucose?</h3>
     <p>Glucose is one of the clearest signals your body gives you after eating. Carbs turn into glucose — your body’s fuel for muscles, mood, and brainpower.</p>
@@ -86,6 +89,7 @@
     <h2>Now... Are you curious what kind of meal is actually healthier for you? And what happens to you body after meals?</h2>
     <p>If you're like us — always debating what to eat today — or you're aiming to meet a nutrient goal...</p>
     <p>Just input your desired nutrient levels below! <br>We’ll recommend a close match and show how your body might react. 🔍</p>
+    <p class="scroll-cue">↓ Keep Scrolling ↓</p>
   </div>
 </section>
 
@@ -110,6 +114,7 @@
 
     <button id="recommendBtn" onclick="recommendFood()">🔍 Recommend Meal</button>
   </div>
+  
   <div class="match-intro">
     <h2>Closest Meal Match</h2>
     <p>
@@ -117,7 +122,7 @@
       Curious how your body might have reacted to it? Check the glucose curve below. 📈
     </p>
   </div>
-  <div id="results"></div>
+  <div id="results">Results</div>
 
   <div class="glucose-intro">
     <h2>🩸 Glucose (mg/dL) After Meal</h2>
@@ -138,21 +143,22 @@
   <div id="hrChart"></div>
   <div id="ibiChart"></div>
   <div id="tooltip"></div>
+  
   <section id="takeaway" class="hero-section takeaway-hero">
-  <div class="hero-content">
-    <h1>🍽️ Key Takeaways</h1>
-    <ul class="takeaway-list">
-      <li><strong>Monitor your response.</strong> Keep an eye on your glucose and heart–rate curves after meals.</li>
-      <li><strong>Choose steady meals.</strong> Meals that avoid sharp glucose spikes reduce risk of insulin resistance and diabetes.</li>
-      <li><strong>Balance macros.</strong> Pair carbs with protein and fiber to slow absorption and stabilize energy.</li>
-      <li><strong>Get personalized advice.</strong> Talk to a healthcare professional for guidance tailored to you.</li>
-    </ul>
-    <p class="takeaway-cta">
-      Stay mindful—your body’s reaction to each meal is the first step toward long-term health!  
-    </p>
-  </div>
-  <p class="scroll-cue">⬆ Back to Top ⬆</p>
-</section>
+    <div class="hero-content">
+      <h1>🍽️ Key Takeaways</h1>
+      <ul class="takeaway-list">
+        <li><strong>Monitor your response.</strong> Keep an eye on your glucose and heart–rate curves after meals.</li>
+        <li><strong>Choose steady meals.</strong> Meals that avoid sharp glucose spikes reduce risk of insulin resistance and diabetes.</li>
+        <li><strong>Balance macros.</strong> Pair carbs with protein and fiber to slow absorption and stabilize energy.</li>
+        <li><strong>Get personalized advice.</strong> Talk to a healthcare professional for guidance tailored to you.</li>
+      </ul>
+      <p class="takeaway-cta">
+        Stay mindful—your body’s reaction to each meal is the first step toward long-term health!  
+      </p>
+    </div>
+    <p class="scroll-cue">⬆ Back to Top ⬆</p>
+  </section>
   <script src="./main.js"></script>
 </body>
 </html>
