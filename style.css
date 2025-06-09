@@ -21,6 +21,14 @@
     font-size: 1.1rem;
   }
   
+  body {
+    background-image: url("./assets/pixel_breakfast.png"); 
+    background-color: #fff9f3;  /* warm egg-shell base */
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-size: auto;
+  }
+  
 /* ================================
    Fixed Navigation Bar
    ================================ */
@@ -401,6 +409,56 @@ h1 {
   text-align: center;
   color: #444;
   transition: opacity 0.6s ease;
+}
+
+.container {
+  background-color: #fefefe;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  transition: transform 0.3s ease;
+}
+
+.container:hover {
+  transform: scale(1.01);
+}
+
+button {
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  border: none;
+  color: white;
+  font-weight: bold;
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #a777e3, #6e8efb);
+  transform: translateY(-2px);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.back-to-top-btn {
+  background: none;
+  border: none;
+  color: #444;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+  font-family: inherit;
+}
+
+.back-to-top-btn:hover {
+  transform: translateY(-2px);
+  color: #000;
 }
 
 

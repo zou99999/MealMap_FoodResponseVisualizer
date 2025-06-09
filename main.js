@@ -80,12 +80,9 @@ function displayMatch(windowHours) {
     <p>🕒 Time: ${m.timeStr} → +${windowHours} hour(s)</p>
     ${matchIndex < sortedMatches.length - 1
       ? `<button onclick="showNextMatch(${windowHours})">
-           ❓ Try Next Best Match
+           Not Satisfied? Get Another!
          </button>`
       : `<p><em>No more matches.</em></p>`}
-    <button onclick="window.location.href='mini-game/index.html'">
-      🧠 Try Your Knowledge
-    </button>
   `;
 
   // Now draw that participant’s charts
@@ -957,4 +954,22 @@ document.addEventListener("DOMContentLoaded", () => {
   if (cakeBtn) cakeBtn.addEventListener("click", () => handleVote("cake"));
 });
 
+// already at bottom of file:
 window.addEventListener("DOMContentLoaded", drawSection2Glucose);
+
+// add this directly under that:
+document.addEventListener("DOMContentLoaded", () => {
+  const backToTopBtn = document.getElementById("backToTopBtn");
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener("click", () => {
+      const target = document.getElementById("recommendContainer");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      } else {
+        console.warn("Target #recommendContainer not found!");
+      }
+    });
+  }
+});
+
+
