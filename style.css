@@ -34,6 +34,7 @@
   padding: 10px 0;
   z-index: 1000;
   text-align: center;
+
 }
 
 .navbar a {
@@ -298,6 +299,12 @@
   40%                     { transform: translateX(-50%) translateY(-10px); }
   60%                     { transform: translateX(-50%) translateY(-5px); }
 }
+
+/* Optional: differentiate backgrounds */
+#section1 { background: #e5edf5; }
+#section1b { background: #f2e5f5; }
+#section2 { background: #eef9f1; }
+#section3 { background: #fcf4e1; }
 #section1 {
   background-color: rgba(255, 255, 255, 0.6);  /* soft white overlay */
   backdrop-filter: blur(1.5px);
@@ -311,14 +318,6 @@
   backdrop-filter: blur(1.5px);
 }
 
-<<<<<<< HEAD
-/* Optional: differentiate backgrounds */
-#section1 { background: #e5edf5; }
-#section1b { background: #f2e5f5; }
-#section2 { background: #eef9f1; }
-#section3 { background: #fcf4e1; }
-=======
->>>>>>> 93bc564e8209c63b9dd81fcfe3d79e9064d7029a
 
 
 #section2GlucoseChart {
