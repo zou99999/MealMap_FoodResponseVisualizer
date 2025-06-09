@@ -287,7 +287,7 @@ body {
 }
 
 /* Optional: differentiate backgrounds */
-#section1 { background: #f0f4f8; }
+#section1 { background: #e5edf5; }
 #section2 { background: #eef9f1; }
 #section3 { background: #fcf4e1; }
 
@@ -296,4 +296,44 @@ body {
   margin: 0 auto;
   width: 1000px;    /* match your other chart widths */
   height: 600px;    /* match your SVG height */
+}
+
+h1 {
+  font-size: 2.5em;
+}
+
+.takeaway-hero {
+  background-color: #e8ebf5;            /* soft green */
+  color: #2e7d32;                       /* darker heading */
+}
+
+.takeaway-hero .hero-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.takeaway-list {
+  list-style: disc inside;
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+}
+
+.takeaway-list li {
+  font-size: 1.25rem;
+  margin: 0.75rem 0;
+  line-height: 1.4;
+}
+
+.takeaway-cta {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+/* Reuse your scroll-cue style, but flip arrow */
+.takeaway-hero .scroll-cue {
+  bottom: 20px;
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
 }
