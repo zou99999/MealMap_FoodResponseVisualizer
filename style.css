@@ -21,6 +21,7 @@
     font-size: 1.1rem;
   }
   
+  
 /* ================================
    Fixed Navigation Bar
    ================================ */
@@ -297,12 +298,27 @@
   40%                     { transform: translateX(-50%) translateY(-10px); }
   60%                     { transform: translateX(-50%) translateY(-5px); }
 }
+#section1 {
+  background-color: rgba(255, 255, 255, 0.6);  /* soft white overlay */
+  backdrop-filter: blur(1.5px);
+}
+#section2 {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(1.5px);
+}
+#section3 {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(1.5px);
+}
 
+<<<<<<< HEAD
 /* Optional: differentiate backgrounds */
 #section1 { background: #e5edf5; }
 #section1b { background: #f2e5f5; }
 #section2 { background: #eef9f1; }
 #section3 { background: #fcf4e1; }
+=======
+>>>>>>> 93bc564e8209c63b9dd81fcfe3d79e9064d7029a
 
 
 #section2GlucoseChart {
@@ -389,6 +405,117 @@ h1 {
   transition: opacity 0.6s ease;
 }
 
+.container {
+  background-color: #fefefe;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  transition: transform 0.3s ease;
+}
+
+.container:hover {
+  transform: scale(1.01);
+}
+
+button {
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  border: none;
+  color: white;
+  font-weight: bold;
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #a777e3, #6e8efb);
+  transform: translateY(-2px);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.back-to-top-btn {
+  background: none;
+  border: none;
+  color: #444;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+  font-family: inherit;
+}
+
+.back-to-top-btn:hover {
+  transform: translateY(-2px);
+  color: #000;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-image: url("/pixel_breakfast.png");
+  background-repeat: repeat;
+  background-size: auto;
+  background-attachment: fixed;
+  opacity: 0.2;
+  z-index: -1;
+}
+
+.text-wrapper {
+  background-color: rgba(255, 255, 255, 0.7); /* soft white background */
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Apply stronger contrast and light shadow to all readable text */
+.text-wrapper h1,
+.text-wrapper h2,
+.text-wrapper h3,
+.text-wrapper p,
+.text-wrapper li,
+.text-wrapper label,
+.text-wrapper input,
+.text-wrapper select,
+.text-wrapper button {
+  color: #1c1c1c;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+body.minigame-page::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-image: url("/pixel_lunch.png");
+  background-repeat: repeat;
+  background-size: auto;
+  background-attachment: fixed;
+  opacity: 0.35;
+  z-index: -1;
+}
+
+body.leaderboard-page::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-image: url("/pixel_dessert.png"); 
+  background-repeat: repeat;
+  background-size: auto;
+  background-attachment: fixed;
+  opacity: 0.35;
+  z-index: -1;
+}
 
 
 
