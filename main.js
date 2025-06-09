@@ -14,7 +14,10 @@ function recommendFood() {
 
   // Build an array of Promises, one per participant
   const promises = [];
-  for (let i = 1; i <= 16; i++) {
+  for (let i = 1; i <= 14; i++) {
+    if(i == 7 || i == 13) {
+      continue;
+    }
     const pid = String(i).padStart(3, "0");
     promises.push(
       d3.csv(`data_p${i}/Food_Meal_Aggregated.csv`)
@@ -150,6 +153,13 @@ function plotHR(partNum, pid, start, end) {
       }))
       .sort((a,b)=>a.minutes_after - b.minutes_after);
 
+    if (hrData.length === 0) {
+      d3.select("#hrChart")
+        .html(`<p style="text-align:center;color:#666;padding:1em;">
+                No heart-rate data<br/>available in this window.
+              </p>`);
+      return; 
+    }
     d3.select("#hrChart").html("");
     drawLineChart(hrData, "#hrChart", {
       title:  "❤️ Heart Rate (avg. bpm) After Meal",
