@@ -507,7 +507,7 @@ body.minigame-page::before {
   background-repeat: repeat;
   background-size: auto;
   background-attachment: fixed;
-  opacity: 0.12;
+  opacity: 0.35;
   z-index: -1;
 }
 
@@ -520,7 +520,7 @@ body.leaderboard-page::before {
   background-repeat: repeat;
   background-size: auto;
   background-attachment: fixed;
-  opacity: 0.12;
+  opacity: 0.35;
   z-index: -1;
 }
 
