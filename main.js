@@ -345,9 +345,6 @@ path
 .ease(d3.easeLinear)
 .attr("stroke-dashoffset", 0);
 
-
-
-
   const cautionTop    = yScale(180);
   const cautionBottom = yScale(140);
   plotArea.append("rect")
@@ -524,10 +521,11 @@ path
     /* ---------------- 7. Legend (only for glucose chart) ------------------ */
 if (containerSelector.includes("glucose")) {
   const legendData = [
-    { label: "High-risk (≥180 mg/dL)",  color: "#FFCDD2" },  // 红
-    { label: "Elevated (140–180 mg/dL)", color: "#FFF9C4" }, // 黄
-    { label: "Target (70–140 mg/dL)",  color: "#C8E6C9" }  // 绿
+    { label: "reactions you should care about!!",  color: "#FFCDD2" },
+    { label: "noticeable reactions like sleepiness", color: "#FFF9C4" },
+    { label: "you are probably fine!",  color: "#C8E6C9" }
   ];
+  
 
   const legend = svgRoot.append("g")
     .attr("class", "risk-legend")
@@ -786,6 +784,20 @@ function drawMultiLineChart(seriesArr, container, options) {
       .style("white-space", "nowrap")
       .text(s.label);
   });
+
+  if (container === "#section2GlucoseChart") {
+    const smoothieLine = seriesArr.find(s => s.label === "Smoothie");
+    if (smoothieLine) {
+      const peak = smoothieLine.data.reduce((a, b) => (a.value > b.value ? a : b));
+      g.append("text")
+        .attr("x", xScale(peak.minutes_after) + 10)
+        .attr("y", yScale(peak.value) - 10)
+        .attr("fill", "#D32F2F")
+        .style("font-size", "14px")
+        .text("⬇️ smoothie brings a glucose spike after drinking")
+        .attr("font-weight", "600");
+    }
+  }  
 }
 
 function drawSection2Glucose() {
@@ -854,7 +866,7 @@ function drawSection2Glucose() {
         seriesArr,
         "#section2GlucoseChart",
         {
-          title:  "🩸 Glucose: Smoothie vs Cake & Ice Cream",
+          title:  "🩸Body Glucose: Smoothie vs Cake&Ice Cream",
           xLabel: "Minutes Since Meal",
           yLabel: "Glucose (mg/dL)"
         }
